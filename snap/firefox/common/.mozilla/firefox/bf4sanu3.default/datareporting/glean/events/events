@@ -1,0 +1,16 @@
+{"timestamp":170026348,"category":"session_restore","name":"backup_can_be_loaded_session_file","extra":{"path_key":"clean","glean_timestamp":"1765541066200","loadfail_reason":"N/A","can_load":"true"}}
+{"timestamp":170026348,"category":"session_restore","name":"backup_can_be_loaded_session_file","extra":{"path_key":"clean","loadfail_reason":"N/A","can_load":"true","glean_timestamp":"1765541066200"}}
+{"timestamp":170026348,"category":"session_restore","name":"shutdown_success_session_startup","extra":{"shutdown_ok":"false","glean_timestamp":"1765541066200","shutdown_reason":"N/A"}}
+{"timestamp":170026617,"category":"webcompatreporting","name":"reason_dropdown","extra":{"setting":"required","glean_timestamp":"1765541066469"}}
+{"timestamp":170026777,"category":"nimbus_events","name":"startup_database_consistency","extra":{"trigger":"startup","db_active_count":"35","primary":"database","total_db_count":"40","glean_timestamp":"1765541066629","total_store_count":"40","store_active_count":"35"}}
+{"timestamp":170026835,"category":"jsonfile","name":"load_autofillprofiles","extra":{"value":"error_notfounderror","glean_timestamp":"1765541066688"}}
+{"timestamp":170026841,"category":"doh","name":"state_rollback","extra":{"glean_timestamp":"1765541066693","value":"null"}}
+{"timestamp":170026951,"category":"normandy","name":"enroll_failed_nimbus_experiment","extra":{"reason":"feature-conflict","glean_timestamp":"1765541066804","value":"vertical-tabs-feature-callout-experiment-v20-treatment-a-rollout"}}
+{"timestamp":170026951,"category":"nimbus_events","name":"enroll_failed","extra":{"glean_timestamp":"1765541066804","experiment":"vertical-tabs-feature-callout-experiment-v20-treatment-a-rollout","reason":"feature-conflict"}}
+{"timestamp":170026961,"category":"normandy","name":"enroll_failed_nimbus_experiment","extra":{"reason":"feature-conflict","glean_timestamp":"1765541066813","value":"account-spotlight-modal-global-rollout-v3"}}
+{"timestamp":170026961,"category":"nimbus_events","name":"enroll_failed","extra":{"reason":"feature-conflict","glean_timestamp":"1765541066813","experiment":"account-spotlight-modal-global-rollout-v3"}}
+{"timestamp":170026986,"category":"nimbus_events","name":"is_ready","extra":{"glean_timestamp":"1765541066838"}}
+{"timestamp":170026990,"category":"containers","name":"container_profile_loaded","extra":{"containers":"4","glean_timestamp":"1765541066842"}}
+{"timestamp":170027008,"category":"jsonfile","name":"load_logins","extra":{"glean_timestamp":"1765541066860","value":"error_notfounderror"}}
+{"timestamp":170027008,"category":"upgrade_dialog","name":"trigger_reason","extra":{"value":"not-major","glean_timestamp":"1765541066860"}}
+{"timestamp":170029194,"category":"doh","name":"state_shutdown","extra":{"glean_timestamp":"1765541069046","value":"null"}}

@@ -1,0 +1,2929 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; object-src 'none'; script-src resource: chrome:; connect-src https:; img-src https: data: blob: chrome:; style-src 'unsafe-inline';">
+    <meta name="color-scheme" content="light dark">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-l10n-id="newtab-page-title"></title>
+    <link rel="icon" type="image/png" href="chrome://branding/content/icon32.png"/>
+    <link rel="localization" href="branding/brand.ftl" />
+    <link rel="localization" href="toolkit/branding/brandings.ftl" />
+    <link rel="localization" href="browser/newtab/newtab.ftl" />
+    <link rel="localization" href="toolkit/global/mozMessageBar.ftl" />
+    <link rel="stylesheet" href="chrome://global/skin/design-system/tokens-brand.css">
+    <link rel="stylesheet" href="chrome://browser/content/contentSearchUI.css" />
+    <link rel="stylesheet" href="chrome://newtab/content/css/activity-stream.css" />
+  </head>
+  <!-- Cached: Fri, 12 Dec 2025 12:02:09 GMT -->
+  <body class="activity-stream">
+    <div id="header-asrouter-container" role="presentation"></div>
+    <div id="root">
+      <div class="has-search has-recommended-stories"><div class="weatherWrapper"></div><div class="mobileDownloadPromoWrapper "></div><div class="outer-wrapper ds-outer-wrapper-search-alignment ds-outer-wrapper-breakpoint-override visible-logo"><main class="newtab-main"><div class="non-collapsible-section"><div class="search-wrapper"><h1 class="logo-and-wordmark-wrapper"><div class="logo-and-wordmark" role="img" data-l10n-id="newtab-logo-and-wordmark"><div class="logo"></div><div class="wordmark"></div></div></h1><div class="search-inner-wrapper"><button class="search-handoff-button" tabindex="-1"><div class="fake-textbox"></div><input type="search" class="fake-editable" tabindex="-1" aria-hidden="true"/><div class="fake-caret"></div></button></div></div></div><div class="body-wrapper on"><dialog class="report-content-form" id="dialog-report"><form action=""><moz-radio-group name="report" id="report-group" data-l10n-id="newtab-report-content-why-reporting-this" className="report-content-options" headingLevel="3"><moz-radio data-l10n-id="newtab-report-content-wrong-category" value="wrong_category"></moz-radio><moz-radio data-l10n-id="newtab-report-content-outdated" value="outdated"></moz-radio><moz-radio data-l10n-id="newtab-report-content-inappropriate-offensive" value="inappropriate_or_offensive"></moz-radio><moz-radio data-l10n-id="newtab-report-content-spam-misleading" value="spam_or_misleading"></moz-radio></moz-radio-group><moz-button-group><moz-button data-l10n-id="newtab-report-cancel" onClick="() =&gt; {
+    dispatch(actionCreators.AlsoToMain({
+      type: actionTypes.REPORT_CLOSE
+    }));
+  }" className="cancel-report-btn"></moz-button><moz-button type="primary" data-l10n-id="newtab-report-submit" onClick="() =&gt; {
+    const {
+      card_type,
+      corpus_item_id,
+      position,
+      reporting_url,
+      scheduled_corpus_item_id,
+      section_position,
+      section,
+      title,
+      topic,
+      url
+    } = report;
+    if (card_type === &quot;organic&quot;) {
+      dispatch(actionCreators.AlsoToMain({
+        type: actionTypes.REPORT_CONTENT_SUBMIT,
+        data: {
+          card_type,
+          corpus_item_id,
+          report_reason: selectedReason,
+          scheduled_corpus_item_id,
+          section_position,
+          section,
+          title,
+          topic,
+          url
+        }
+      }));
+    } else if (card_type === &quot;spoc&quot;) {
+      // Retrieve placement_id by comparing spocData with the ad that was reported
+      const getPlacementId = () =&gt; {
+        if (!spocData || !report.url) {
+          return null;
+        }
+        for (const [placementId, spocList] of Object.entries(spocData)) {
+          for (const spoc of Object.values(spocList)) {
+            if (spoc?.url === report.url) {
+              return placementId;
+            }
+          }
+        }
+        return null;
+      };
+      const placement_id = getPlacementId();
+      dispatch(actionCreators.AlsoToMain({
+        type: actionTypes.REPORT_AD_SUBMIT,
+        data: {
+          report_reason: selectedReason,
+          placement_id,
+          position,
+          reporting_url,
+          url
+        }
+      }));
+    }
+    dispatch(actionCreators.AlsoToMain({
+      type: actionTypes.BLOCK_URL,
+      data: [{
+        ...report
+      }]
+    }));
+    dispatch(actionCreators.OnlyToOneContent({
+      type: actionTypes.SHOW_TOAST_MESSAGE,
+      data: {
+        toastId: &quot;reportSuccessToast&quot;,
+        showNotifications: true
+      }
+    }, &quot;ActivityStream:Content&quot;));
+  }" className="submit-report-btn"></moz-button></moz-button-group></form></dialog><div class="discovery-stream ds-layout ds-layout-topsites"><div class="ds-column ds-column-12"><div class="ds-column-grid"><div><div class="ds-top-sites"><section class="collapsible-section top-sites" data-section-id="topsites"><div class="section-top-bar"><h2 class="section-title-container " style="visibility:hidden"><span class="section-title"><span data-l10n-id="newtab-section-header-topsites"></span></span></h2></div><div><div class="top-sites-list-wrapper"><ul role="group" aria-label="Shortcuts" class="top-sites-list"><li class="top-site-outer placeholder "><div class="top-site-inner"><a class="top-site-button" draggable="true" data-is-sponsored-link="false" aria-label="" title="" data-l10n-args="{&quot;title&quot;:&quot;&quot;}"><div class="tile" aria-hidden="true"><div class="icon-wrapper"><div class=""></div></div></div><div class="title"><span class="title-label" dir="auto"><br/></span><span class="sponsored-label" data-l10n-id="newtab-topsite-sponsored"></span></div></a><div class="topsite-impression-observer"></div></div></li><li class="top-site-outer placeholder "><div class="top-site-inner"><a class="top-site-button" draggable="true" data-is-sponsored-link="false" aria-label="" title="" data-l10n-args="{&quot;title&quot;:&quot;&quot;}"><div class="tile" aria-hidden="true"><div class="icon-wrapper"><div class=""></div></div></div><div class="title"><span class="title-label" dir="auto"><br/></span><span class="sponsored-label" data-l10n-id="newtab-topsite-sponsored"></span></div></a><div class="topsite-impression-observer"></div></div></li><li class="top-site-outer placeholder "><div class="top-site-inner"><a class="top-site-button" draggable="true" data-is-sponsored-link="false" aria-label="" title="" data-l10n-args="{&quot;title&quot;:&quot;&quot;}"><div class="tile" aria-hidden="true"><div class="icon-wrapper"><div class=""></div></div></div><div class="title"><span class="title-label" dir="auto"><br/></span><span class="sponsored-label" data-l10n-id="newtab-topsite-sponsored"></span></div></a><div class="topsite-impression-observer"></div></div></li><li class="top-site-outer"><div class="top-site-inner"><a class="top-site-button" href="https://www.wikipedia.org/" tabindex="-1" draggable="true" data-is-sponsored-link="false" aria-label="Wikipedia" title="Wikipedia" data-l10n-args="{&quot;title&quot;:&quot;Wikipedia&quot;}"><div class="tile" aria-hidden="true"><div class="icon-wrapper" data-fallback="W"><div class="top-site-icon rich-icon" style="background-image:url(chrome://activity-stream/content/data/content/tippytop/images/wikipedia-org@2x.png)"></div></div></div><div class="title"><span class="title-label" dir="auto">Wikipedia</span><span class="sponsored-label" data-l10n-id="newtab-topsite-sponsored"></span></div></a><div><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Wikipedia&quot;}" class="context-menu-button icon" tabindex="-1"></button></div><div class="topsite-impression-observer"></div></div></li><li class="top-site-outer"><div class="top-site-inner"><a class="top-site-button" href="https://www.youtube.com/" tabindex="-1" draggable="true" data-is-sponsored-link="false" aria-label="YouTube" title="YouTube" data-l10n-args="{&quot;title&quot;:&quot;YouTube&quot;}"><div class="tile" aria-hidden="true"><div class="icon-wrapper" data-fallback="Y"><div class="top-site-icon rich-icon" style="background-image:url(chrome://activity-stream/content/data/content/tippytop/images/youtube-com@2x.png)"></div></div></div><div class="title"><span class="title-label" dir="auto">YouTube</span><span class="sponsored-label" data-l10n-id="newtab-topsite-sponsored"></span></div></a><div><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;YouTube&quot;}" class="context-menu-button icon" tabindex="-1"></button></div><div class="topsite-impression-observer"></div></div></li><li class="top-site-outer"><div class="top-site-inner"><a class="top-site-button" href="https://www.bbc.co.uk/" tabindex="-1" draggable="true" data-is-sponsored-link="false" aria-label="BBC" title="BBC" data-l10n-args="{&quot;title&quot;:&quot;BBC&quot;}"><div class="tile" aria-hidden="true"><div class="icon-wrapper" data-fallback="B"><div class="top-site-icon rich-icon" style="background-image:url(chrome://activity-stream/content/data/content/tippytop/images/bbc-uk@2x.png)"></div></div></div><div class="title"><span class="title-label" dir="auto">BBC</span><span class="sponsored-label" data-l10n-id="newtab-topsite-sponsored"></span></div></a><div><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;BBC&quot;}" class="context-menu-button icon" tabindex="-1"></button></div><div class="topsite-impression-observer"></div></div></li><li class="top-site-outer hide-for-narrow"><div class="top-site-inner"><a class="top-site-button" href="https://www.reddit.com/" tabindex="-1" draggable="true" data-is-sponsored-link="false" aria-label="Reddit" title="Reddit" data-l10n-args="{&quot;title&quot;:&quot;Reddit&quot;}"><div class="tile" aria-hidden="true"><div class="icon-wrapper" data-fallback="R"><div class="top-site-icon rich-icon" style="background-image:url(chrome://activity-stream/content/data/content/tippytop/images/reddit-com@2x.png)"></div></div></div><div class="title"><span class="title-label" dir="auto">Reddit</span><span class="sponsored-label" data-l10n-id="newtab-topsite-sponsored"></span></div></a><div><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Reddit&quot;}" class="context-menu-button icon" tabindex="-1"></button></div><div class="topsite-impression-observer"></div></div></li><li class="top-site-outer add-button hide-for-narrow"><div class="top-site-inner"><a class="top-site-button" tabindex="-1" draggable="true" data-is-sponsored-link="false" aria-label="" data-l10n-id="newtab-topsites-add-shortcut-title" data-l10n-args="{&quot;title&quot;:&quot;&quot;}"><div class="tile" aria-hidden="true"><div class="icon-wrapper"><div class=""></div></div></div><div class="title"><span class="title-label" dir="auto" data-l10n-id="newtab-topsites-add-shortcut-label"><br/></span><span class="sponsored-label" data-l10n-id="newtab-topsite-sponsored"></span></div></a><div class="topsite-impression-observer"></div></div></li></ul></div><div class="edit-topsites-wrapper"></div></div></section></div></div></div></div><style data-styles="[[null]]"></style></div><section class="collapsible-section ds-layout" data-section-id="topstories"><div class="section-top-bar"><h2 class="section-title-container "><span class="section-title"><span data-l10n-id="newtab-section-header-stories"></span></span></h2></div><div><div class="discovery-stream ds-layout "><div class="ds-column ds-column-12"><div class="ds-column-grid"><div><div><div class="ds-card-grid     "><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://news.sky.com/story/three-men-jailed-for-life-after-man-60-shot-dead-through-window-in-county-durham-13482063?utm_source=firefox-newtab-en-gb" title="Three Men Jailed for Life After Man, 60, Shot Dead Through Living Room Window in County Durham" class="ds-card-link" data-is-sponsored-link="false" tabindex="0"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">Three Men Jailed for Life After Man, 60, Shot Dead Through Living Room Window in County Durham</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Sky</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="0"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="0"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Three Men Jailed for Life After Man, 60, Shot Dead Through Living Room Window in County Durham&quot;}" class="context-menu-button icon" tabindex="0"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.vice.com/en/article/why-your-dog-always-looks-sad-when-you-feel-happy/?utm_source=firefox-newtab-en-gb" title="Why Your Dog Always Looks Sad When You Feel Happy" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">Why Your Dog Always Looks Sad When You Feel Happy</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">VICE</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Why Your Dog Always Looks Sad When You Feel Happy&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><div class="ds-card placeholder placeholder-seen refined-cards"><div class="placeholder-image placeholder-fill"></div><div class="placeholder-description placeholder-fill"></div><div class="placeholder-header placeholder-fill"></div></div><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.theguardian.com/thefilter/2025/dec/05/best-supermarket-christmas-crisps?utm_source=firefox-newtab-en-gb" title="‘Best Eaten With a Hangover’: The Best (and Worst) Supermarket Christmas Crisps, Tasted and Rated" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">‘Best Eaten With a Hangover’: The Best (and Worst) Supermarket Christmas Crisps, Tasted and Rated</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">The Guardian</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;‘Best Eaten With a Hangover’: The Best (and Worst) Supermarket Christmas Crisps, Tasted and Rated&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><div class="ds-card placeholder placeholder-seen refined-cards"><div class="placeholder-image placeholder-fill"></div><div class="placeholder-description placeholder-fill"></div><div class="placeholder-header placeholder-fill"></div></div><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.forbes.com/sites/brettknight/2025/12/09/formula-1s-highest-paid-drivers-2025/?utm_source=firefox-newtab-en-gb" title="Formula 1’s Highest-Paid Drivers 2025" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">Formula 1’s Highest-Paid Drivers 2025</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Forbes</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Formula 1’s Highest-Paid Drivers 2025&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.marieclaire.co.uk/life/health-fitness/best-strength-building-pilates-exercises?utm_source=firefox-newtab-en-gb" title="World Renowned Pilates Instructors Confirm: You Can Get Stronger At Any Age With These 3 Simple At-Home Moves" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">World Renowned Pilates Instructors Confirm: You Can Get Stronger At Any Age With These 3 Simple At-Home Moves</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Marie Claire UK</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;World Renowned Pilates Instructors Confirm: You Can Get Stronger At Any Age With These 3 Simple At-Home Moves&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.gq-magazine.co.uk/article/50-cent-explains-why-he-made-a-diddy-docuseries?utm_source=firefox-newtab-en-gb" title="50 Cent Explains Why He Made a Diddy Docuseries" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">50 Cent Explains Why He Made a Diddy Docuseries</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">British GQ</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;50 Cent Explains Why He Made a Diddy Docuseries&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.theguardian.com/business/2025/dec/12/mps-anounce-inquiry-office-for-budget-responsibility?utm_source=firefox-newtab-en-gb" title="MPs Announce Inquiry Into Work of Office for Budget Responsibility" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">MPs Announce Inquiry Into Work of Office for Budget Responsibility</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">The Guardian</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;MPs Announce Inquiry Into Work of Office for Budget Responsibility&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.cntraveller.com/article/uk-bakeries-worth-travelling-for?utm_source=firefox-newtab-en-gb" title="10 Best Bakeries in the UK Worth Travelling For" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">10 Best Bakeries in the UK Worth Travelling For</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Condé Nast Traveller</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;10 Best Bakeries in the UK Worth Travelling For&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.eurogamer.net/sad-your-favourite-og-xbox-game-is-missing-from-game-pass-that-might-change-next-year?utm_source=firefox-newtab-en-gb" title="Sad Your Favourite OG Xbox Game Is Missing From Game Pass? Microsoft Suggests That Might Change Next Year" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">Sad Your Favourite OG Xbox Game Is Missing From Game Pass? Microsoft Suggests That Might Change Next Year</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Eurogamer</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Sad Your Favourite OG Xbox Game Is Missing From Game Pass? Microsoft Suggests That Might Change Next Year&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.bbc.co.uk/news/articles/c8r30787e76o?utm_source=firefox-newtab-en-gb" title="‘Super Flu’ Wave Hits Hospitals in England With No Peak Yet" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">‘Super Flu’ Wave Hits Hospitals in England With No Peak Yet</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">BBC</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;‘Super Flu’ Wave Hits Hospitals in England With No Peak Yet&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://time.com/7339501/young-people-struggling-to-communicate/?utm_source=firefox-newtab-en-gb" title="Why Young People are Struggling to Communicate" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">Why Young People are Struggling to Communicate</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Time</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Why Young People are Struggling to Communicate&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.makeuseof.com/images-carry-invisible-data-youve-never-checked/?utm_source=firefox-newtab-en-gb" title="Your Images Carry Invisible Data You’ve Probably Never Checked" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">Your Images Carry Invisible Data You’ve Probably Never Checked</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">MakeUseOf</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Your Images Carry Invisible Data You’ve Probably Never Checked&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.cityam.com/inside-londons-occult-bookshops/?utm_source=firefox-newtab-en-gb" title="Inside London’s Occult Bookshops" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">Inside London’s Occult Bookshops</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">CityAM</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Inside London’s Occult Bookshops&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.bbc.com/future/article/20251205-how-the-handheld-digital-camera-was-born?utm_source=firefox-newtab-en-gb" title="A ‘Toaster With a Lens’: The Story Behind the First Handheld Digital Camera" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">A ‘Toaster With a Lens’: The Story Behind the First Handheld Digital Camera</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">BBC</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;A ‘Toaster With a Lens’: The Story Behind the First Handheld Digital Camera&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.glamourmagazine.co.uk/article/kin-keeping-christmas?utm_source=firefox-newtab-en-gb" title="Exhausted by the Emotional Labour of Christmas? You May Be Your Family’s ‘Kinkeeper’" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">Exhausted by the Emotional Labour of Christmas? You May Be Your Family’s ‘Kinkeeper’</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Glamour Magazine</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Exhausted by the Emotional Labour of Christmas? You May Be Your Family’s ‘Kinkeeper’&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.vox.com/life/471602/loneliness-fix-new-friends?utm_source=firefox-newtab-en-gb" title="People Are Nicer Than You Think" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">People Are Nicer Than You Think</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Vox</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;People Are Nicer Than You Think&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.parents.com/why-male-fertility-matters-more-than-ever-11859883?utm_source=firefox-newtab-en-gb" title="Why Male Fertility Matters More Than Ever—and What You Can Do About It" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">Why Male Fertility Matters More Than Ever—and What You Can Do About It</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Parents</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Why Male Fertility Matters More Than Ever—and What You Can Do About It&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.houseandgarden.co.uk/article/ideas-for-homemade-christmas-presents?utm_source=firefox-newtab-en-gb" title="Five Ideas for Homemade Christmas Presents That Everyone Will Love" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">Five Ideas for Homemade Christmas Presents That Everyone Will Love</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">House &amp; Garden</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Five Ideas for Homemade Christmas Presents That Everyone Will Love&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.menshealth.com/uk/nutrition/food-drink/a69642327/can-drink-electrolytes-every-day/?utm_source=firefox-newtab-en-gb" title="You Don’t Need Daily Electrolyte Drinks – Here’s When They Actually Help" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">You Don’t Need Daily Electrolyte Drinks – Here’s When They Actually Help</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Men&#x27;s Health</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;You Don’t Need Daily Electrolyte Drinks – Here’s When They Actually Help&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.realsimple.com/how-to-degrease-a-toaster-oven-11860431?utm_source=firefox-newtab-en-gb" title="The Easiest Ways to Degrease Your Toaster Oven, According to Cleaning Pros" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">The Easiest Ways to Degrease Your Toaster Oven, According to Cleaning Pros</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Real Simple</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;The Easiest Ways to Degrease Your Toaster Oven, According to Cleaning Pros&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.inc.com/jeff-haden/why-indecisive-people-tend-to-make-better-decisions-backed-by-cognitive-science/91276144?utm_source=firefox-newtab-en-gb" title="Why ‘Indecisive’ People Tend to Make Better Decisions, Backed by Cognitive Science" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">Why ‘Indecisive’ People Tend to Make Better Decisions, Backed by Cognitive Science</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">Inc. Magazine</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;Why ‘Indecisive’ People Tend to Make Better Decisions, Backed by Cognitive Science&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article><article class="ds-card sections-card-ui    ds-card-title-lines-3 ds-card-desc-lines-3    refined-cards"><a href="https://www.newyorker.com/news/fault-lines/if-you-quit-social-media-will-you-read-more-books?utm_source=firefox-newtab-en-gb" title="If You Quit Social Media, Will You Read More Books?" class="ds-card-link" data-is-sponsored-link="false" tabindex="-1"><div class="img-wrapper"><picture class="ds-image
+       img 
+      
+      
+     loaded"><div class="broken-image"></div></picture></div><div class="impression-observer"></div><div class="meta"><div class="info-wrap"><h3 class="title clamp">If You Quit Social Media, Will You Read More Books?</h3></div><div class="sections-card-footer"><div class="source-wrapper"><p class="source clamp">The New Yorker</p></div><div class="card-stp-thumbs-buttons-wrapper"><div class="card-stp-thumbs-buttons"><moz-button iconsrc="chrome://global/skin/icons/thumbs-up-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-up refined-layout null" data-l10n-id="newtab-pocket-thumbs-up-tooltip" type="icon ghost" tabIndex="-1"></moz-button><moz-button iconsrc="chrome://global/skin/icons/thumbs-down-20.svg" onClick="function() {
+    [native code]
+}" className="card-stp-thumbs-button icon icon-thumbs-down null" data-l10n-id="newtab-pocket-thumbs-down-tooltip" type="icon ghost" tabIndex="-1"></moz-button></div></div></div></div></a><div class="card-stp-button-hover-background"><div class="card-stp-button-position-wrapper"><div class="context-menu-position-container"><button aria-haspopup="true" data-l10n-id="newtab-menu-content-tooltip" data-l10n-args="{&quot;title&quot;:&quot;If You Quit Social Media, Will You Read More Books?&quot;}" class="context-menu-button icon" tabindex="-1"></button></div></div></div></article></div></div></div><div><div class="ds-navigation ds-navigation-left-align "><ul></ul><a href="https://www.mozilla.org/privacy/firefox/#recommend-relevant-content" class="ds-navigation-privacy" data-is-sponsored-link="false"><span data-l10n-id="newtab-section-menu-privacy-notice"></span></a></div></div></div></div><style data-styles="[[null,{&quot;.ds-navigation&quot;:&quot;margin-block-start: -10px;&quot;}]]"></style></div></div></section><div class="discovery-stream ds-layout "><div class="ds-column ds-column-12"><div class="ds-column-grid"><div></div></div></div><style data-styles="[[null]]"></style></div></div></main><aside></aside></div><menu class="personalizeButtonWrapper"><span><button class="personalize-button" data-l10n-id="newtab-customize-panel-icon-button"><label data-l10n-id="newtab-customize-panel-icon-button-label"></label><div><img role="presentation" src="chrome://global/skin/icons/edit-outline.svg"/></div></button><div class="customize-menu-animate-wrapper"><div class="customize-menu " role="dialog" data-l10n-id="newtab-settings-dialog-label"><div class="close-button-wrapper"><moz-button onClick="() =&gt; this.props.onClose()" id="close-button" type="icon ghost" data-l10n-id="newtab-custom-close-menu-button" iconsrc="chrome://global/skin/icons/close.svg"></moz-button></div><div class="home-section"><div class="wallpapers-section"><div><div class="category-header"><h2 data-l10n-id="newtab-wallpaper-title"></h2><button class="wallpapers-reset" data-l10n-id="newtab-wallpaper-reset"></button></div><div role="grid" aria-label="Wallpaper category selection. Use arrow keys to navigate."><fieldset class="category-list"><div><button id="abstracts" style="background-image:url(https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/18c7861f-0c9d-48d4-a98c-fb8999e331bd.avif)" class="wallpaper-input
+                      
+                      " tabindex="0"></button><label for="abstracts" data-l10n-id="newtab-wallpaper-category-title-abstract">newtab-wallpaper-category-title-abstract</label></div><div><button id="solid-colors" style="background-color:#76C1FF" class="wallpaper-input
+                      
+                      " tabindex="-1"></button><label for="solid-colors" data-l10n-id="newtab-wallpaper-category-title-colors">newtab-wallpaper-category-title-colors</label></div><div><button id="photographs" style="background-image:url(https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/e94b1e49-c518-40d6-98e3-dffab6cc370d.avif)" class="wallpaper-input
+                      
+                      " tabindex="-1"></button><label for="photographs" data-l10n-id="newtab-wallpaper-category-title-photographs">newtab-wallpaper-category-title-photographs</label></div><div><button id="firefox" style="background-image:url(https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/6f7e2155-df50-4917-81fd-9c6f16e14965.svg)" class="wallpaper-input
+                      
+                      " tabindex="-1"></button><label for="firefox" data-l10n-id="newtab-wallpaper-category-title-firefox">newtab-wallpaper-category-title-firefox</label></div><div><button id="celestial" style="background-image:url(https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/55b678ff-15c3-49d5-bdbc-40f8413cfb8a.avif)" class="wallpaper-input
+                      
+                      " tabindex="-1"></button><label for="celestial" data-l10n-id="newtab-wallpaper-category-title-celestial">newtab-wallpaper-category-title-celestial</label></div><div><button id="custom-wallpaper" style="background-color:" class="wallpaper-input
+                      theme-custom-wallpaper
+                      " tabindex="-1" aria-errormessage="customWallpaperError"></button><label for="custom-wallpaper" data-l10n-id="newtab-wallpaper-upload-image">newtab-wallpaper-upload-image</label></div></fieldset></div></div></div><span class="divider" role="separator"></span><div class="settings-toggles"><div id="shortcuts-section" class="section"><moz-toggle id="shortcuts-toggle" pressed="true" onToggle="function() {
+    [native code]
+}" data-preference="feeds.topsites" data-eventSource="TOP_SITES" data-l10n-id="newtab-custom-shortcuts-toggle"><div slot="nested"><div class="more-info-top-wrapper"><div class="more-information"><select id="row-selector" class="selector" name="row-count" data-preference="topSitesRows" aria-labelledby="custom-shortcuts-title"><option selected="" value="1" data-l10n-id="newtab-custom-row-selector" data-l10n-args="{&quot;num&quot;: 1}"></option><option value="2" data-l10n-id="newtab-custom-row-selector" data-l10n-args="{&quot;num&quot;: 2}"></option><option value="3" data-l10n-id="newtab-custom-row-selector" data-l10n-args="{&quot;num&quot;: 3}"></option><option value="4" data-l10n-id="newtab-custom-row-selector" data-l10n-args="{&quot;num&quot;: 4}"></option></select></div></div></div></moz-toggle></div><div id="pocket-section" class="section"><moz-toggle id="pocket-toggle" pressed="true" onToggle="function() {
+    [native code]
+}" aria-describedby="custom-pocket-subtitle" data-preference="feeds.section.topstories" data-eventSource="TOP_STORIES" data-l10n-id="newtab-custom-stories-toggle"><div slot="nested"></div></moz-toggle></div></div><span class="divider" role="separator"></span><div><button id="settings-link" class="external-link" data-l10n-id="newtab-custom-settings"></button></div></div></div></div></span></menu></div>
+    </div>
+    <div id="footer-asrouter-container" role="presentation"></div>
+    <script src="about:home?jscache"></script>
+    <script async type="module" src="chrome://global/content/elements/moz-toggle.mjs"></script>
+    <script async type="module" src="chrome://global/content/elements/moz-badge.mjs"></script>
+    <script async type="module" src="chrome://global/content/elements/moz-button.mjs"></script>
+    <script async type="module" src="chrome://global/content/elements/moz-button-group.mjs"></script>
+    <script async type="module" src="chrome://global/content/elements/moz-box-button.mjs"></script>
+    <script async type="module" src="chrome://global/content/elements/moz-message-bar.mjs"></script>
+    <script async type="module" src="chrome://global/content/elements/moz-radio-group.mjs"></script>
+    <script async type="module" src="chrome://global/content/elements/moz-select.mjs"></script>
+    <script async type="module" src="chrome://global/content/elements/moz-reorderable-list.mjs"></script>
+    <script async type="module" src="chrome://global/content/elements/panel-list.js"></script>
+  </body>
+</html>
+window.__FROM_STARTUP_CACHE__ = true;
+window.__STARTUP_STATE__ = {
+	"TopSites": {
+		"initialized": true,
+		"rows": [
+			{
+				"isDefault": true,
+				"url": "https://www.amazon.co.uk/?tag=admpdesktopuk-21&ref=pd_sl_3a1f1edc9ea0c606eaef7b96e56bfaa031c0ae34d90e37072ed929c4&mfadid=adm",
+				"hostname": "amazon",
+				"sendAttributionRequest": false,
+				"label": "Amazon",
+				"show_sponsored_label": true,
+				"sponsored_position": 1,
+				"sponsored_click_url": "https://ads.mozilla.org/v1/t?data=CokKEgU3NDM1NxoMCPyB8MkGEOqU290BIgwIvYjwyQYQx_n4kgMqBkFtYXpvbjIkYzA3NGFlMWItODk2ZS00Y2ZmLWE2MjctNWY4NjI1ODVmZjZmOgJHQnINbmV3dGFiX3RpbGVfMXoDRU5HggFOTW96aWxsYS81LjAgKFgxMTsgVWJ1bnR1OyBMaW51eCB4ODZfNjQ7IHJ2OjE0Ni4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0Ni4wmAECoAEBqAEDsAEDuAECwgEkN2YyZjhlNjEtM2Q5My00M2JhLTlmNjctMzZlY2Q1MDJmMDM5yAEBkgGSCAqPCGh0dHBzOi8vYnJpZGdlLnBkeDEuYWRtYXJrZXRwbGFjZS5uZXQvY3RwP3ZlcnNpb249MS4wLjAmZW5jcD1qbkVZeG13VkpRa1g1UWJVZnRJTkklM0R3cWdDbG54R0VrZ0NscjRRRGRmWnFaZnA4XzRaSG5IbndxSSUzREVZRCUzRGNZSEZkWmdGNDlEbklRZlJObkNDN2NzY3ZTM25YaTNra2RGd2pjamR3UEZHajFKRUklMkZGd2pJZmR3U2laN2lFY0RZRkZkaWljd0QyR3Y0RWtkckZFakVzcV85RENFNDNkRVBDUnZlZmtkdUVudWdFbHFkRkd2MzdSZU9nQ2xXZnRhVzdSRWtpQ2ttN1JFUmlDa1k3bmRaajllS2lGM2FnQ2JuaXJqdklwa1o0Q3hhZlpMazRwbG54R0V3eFJ3dklwa1k0Q3hhZlo4bTFweFpmWkxyMXA4cmZRYm5KRzRranBrVzdSN2tIbld6SW5jVHhtRG54OTNraUYyemZ0SXF4JTNENHZJcGtXN25jV2ZaZDRzQ2VhQ2MzN2psZF9mOTMxRFplYUNFZldzbFhEM0czZkVjcWtDdzNjc2x6RjE5TjFzcURrN240a3NGd3FnQ2xuSHI3d2lGMnoxcDhfZllJV0olM0R3cWdDbFdmcHhuSTk0V0hud3FnQ2xXZkNxbkk5NFdIRjNtaUYyemZDYlcxQklxeHJlTmpGM21pRjJ6NFFMWGZZSXF4cmV2Sm13cWdDbGs0UUxuSEYzWkolM0R3cWdDOGQ0WkxaZlFIYTRaZm1mWnFrMXB4WWZPSVpKJTNEemtKUkV1Z0NsbmlGd1FnQmtYMVlrWDFZa1gxWWtYMVlrWDduRVVFRTdmZ0RYODJDNG5FdzMlMkYxY3htSlJjNUVxWFpJRF8zanREWTJ3d1lKJTNEdVVIcjQlMkZCa04yamM3R0hrTiUzRHhGN19DbGRlQiUzRHo2eHFIYUJwd1dzRnp3aVFMWDdDNyUzRDFsWEZJOXdYQmxqUGlxejZpRWpkRW5JWDRuemV4RSUyRl9qOUlJNHJFYUNFZVZEbGNSalI0VjRySF9zUTNsQkJEWTJRakMzJTNEd2FmR05mSUZMWGprWDdDR04lMkZERzdTaURONEludnZDRXc4NFI3cUVuSVVIcUVDRDl4d2ZxN2lCa0FhSjlEWEklM0Q3ZWpFMzNKJTNEYW1GQ3dsM1IzSEptRUI0R2pSRkdOVjJRZThERWozakcza2ZDN2E3UjdrSnJmejZRVFMxWSUyRk02T0lReHBrVzVRMlk0UWJUZnRXWGZwOHI1cGJUZnRXWGZwYnI1dFdUNXRYa2lGWHd4cmJUSG5jUWltSXZKJTNEWEtIbXpVSTlFUWlHSXcSIPSOOTI_dgkTBJeq5Ig2nlK4SwBN985JHny7Xcgs2mdh",
+				"sponsored_impression_url": "https://ads.mozilla.org/v1/t?data=CskDEgU3NDM1NxoMCPyB8MkGEOqU290BIgwIvYjwyQYQx_n4kgMqBkFtYXpvbjIkYzA3NGFlMWItODk2ZS00Y2ZmLWE2MjctNWY4NjI1ODVmZjZmOgJHQnINbmV3dGFiX3RpbGVfMXoDRU5HggFOTW96aWxsYS81LjAgKFgxMTsgVWJ1bnR1OyBMaW51eCB4ODZfNjQ7IHJ2OjE0Ni4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0Ni4wmAEBoAEBqAEDsAEDuAECwgEkN2YyZjhlNjEtM2Q5My00M2JhLTlmNjctMzZlY2Q1MDJmMDM5yAEBkgHSAQrPAWh0dHBzOi8vaW1wLm10NDgubmV0L3N0YXRpYz9pZD03Ukh6Zk9JWGpGRVlzQmR2SXBrWTRDeGFmWjhtMXB4WmZaTHIxcDhyZlFibmo5d1dJQmR2SXBrWTduNFlJRmNraUdJdzVGd3FnQ0xZMUNmbnglM0RYTkhtRXVJRiUyQms1RndxZ0NsV2ZweG5IRjJ1eG1FVElGNGtpRnpVNUZ3cWdDOGQ0WkxaZlFIYTRaZm1mWnFrMXB4WWZPSVpKJTNEems1RiUyQmRKRjd3eFFrWBIg-cV6BnMlxVuuQ2D0VVhmVKhGp5Cl120Lg-jk1H2bWYU",
+				"sponsored_tile_id": "CAMSBmFtYXpvbg",
+				"partner": "amp",
+				"block_key": "CAMSBmFtYXpvbg",
+				"favicon": "https://ads-img.mozilla.org/v1/images?image_data=Cj0KO2h0dHBzOi8vYW1wLWFzc2V0LjQ1dHUxYzAuY29tL2Fzc2V0cy8xMDA5LzE1MjEyMjgwODcxNzYuanBnEiAV36GGy4uG4Kc3hcPXsQNe08loM62OgGAgcMju8zD3jQ",
+				"faviconSize": 200,
+				"typedBonus": true
+			},
+			{
+				"isDefault": true,
+				"url": "https://www.jet2holidays.com/?utm_source=admarketplace&utm_medium=cpc&utm_campaign=AMP+Find+Jet2&utm_content=257832687338782720&mfadid=adm",
+				"hostname": "jet2holidays",
+				"sendAttributionRequest": false,
+				"label": "Jet2holidays",
+				"show_sponsored_label": true,
+				"sponsored_position": 2,
+				"sponsored_click_url": "https://ads.mozilla.org/v1/t?data=CsMJEgU3NTE0MRoMCPyB8MkGEI-E3N0BIgwIvYjwyQYQx_n4kgMqDEpldDJob2xpZGF5czIkYzA3NGFlMWItODk2ZS00Y2ZmLWE2MjctNWY4NjI1ODVmZjZmOgJHQnINbmV3dGFiX3RpbGVfMnoDRU5HggFOTW96aWxsYS81LjAgKFgxMTsgVWJ1bnR1OyBMaW51eCB4ODZfNjQ7IHJ2OjE0Ni4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0Ni4wmAECoAEBqAEDsAEDuAECwgEkN2YyZjhlNjEtM2Q5My00M2JhLTlmNjctMzZlY2Q1MDJmMDM5yAECkgHGBwrDB2h0dHBzOi8vYnJpZGdlLnBkeDEuYWRtYXJrZXRwbGFjZS5uZXQvY3RwP3ZlcnNpb249MS4wLjAmZW5jcD1qbkVZeG13VkpRa1g1UWJVZnRJTkklM0R3cWdDOG54R0VrZ0NscjRRRGRmWnFaZnA4XzRaSG5IbndxSSUzREVZRCUzRGNZSEZkWmdEZFNFQzRnM2xkX0NudlJma2RQQ0MzMXNual9DUnY3allJV0hRa1hmcGJVZnRJZGolM0RxejRPSWRJbXF6Zk9JdXhyM1dHbXdxc3BrVzdudXJpRjJ6ZlpEYTFwcXI0QzJtN1JjZElHN19pRjJ6ZlFEcjFwZlk0UUxyZlpmYTRaTFk0WjhXN25kWmo5MnpmdElZaiUzRDdUZ0ZJTko5NHc3UmVraiUzRHdxZ0Nibkk5ZVFpRjJ6ZnRJUWo5d3ZJcGtYN240WUlGd3FnQ2xXNFFxcjdSZVRpRjJ6ZkNiVzRZSXF4cmVPaUYyemZDMmE0dElxeHJlTkk5SXZJcGtYNHBmYTduM1p4JTNEY2RJOUl2SXBrYTRwTF83bjNaeCUzRHdWaUYyemZDRGQxdElOSTk0VGlGMnpmUURyMXBmWTRRTHJmWkhhZkMyWTFDeF83UjRUSnIzVWpGa3pmT0l2aUZmejVDbE01Q2xNNUNsTTVDbE01Q2xuSUZfRURxV3pDbE5lZm1JRkUlM0RMYUVaamQzUnZtMkd3NEZRanVmUkltaSUzRFhhMm1YX2l3d3dJQkRZMnFYd0NSdjZqcVd3ZnE3QkltZldGJTNEWGdGR0VxaVFscmZrZGxGR3ZCRm5IWER3SVNDOWJhSjl2UzNsTnc3QzclM0Q0UWxkMkQ4a0VxNzZ4cndEaXFOQ2p3RTVpcV8lM0REZDRhM213d2lwNzJpcXpRM1JOUWZxalZJRU5mSUYzM2lud3FFbTR3QyUzRGNuRG1OWnhsZE94bkx3ZnFJRURjNzJKT0RZMlJFRTNaSTUzcGVTSkdJUXNxYWFCQkRZM1IlMkZ3ZnE3YUJsM2c3QzclM0RFJTNEbGtCQ2M1N0M3JTNEQ1FIWDJaM0RJRXdaZkMya0lEcW1zRl9hRW00dXNFZUlKJTNEZEdJJTNETjREUUVySm5YZ2pZRFozdERaM3RJWWolM0R6WmdCJTJGTTZRVFMxWSUyRm5IcmJ6Zk9hZGZRYlc1cGJUZlFxcmZCV1c1cGJUZkNiVzRZV1Q1dFdUaiUzRHdUSUc0VzUlM0Q3TkhtdW5pRlhUR200VkpuM2RIbXdtSTJ5eRIg-a_CqbyFwCqPlYsGIJEmoMgAUVUS8gVoSZwxw64g51k",
+				"sponsored_impression_url": "https://ads.mozilla.org/v1/t?data=CtEDEgU3NTE0MRoMCPyB8MkGEI-E3N0BIgwIvYjwyQYQx_n4kgMqDEpldDJob2xpZGF5czIkYzA3NGFlMWItODk2ZS00Y2ZmLWE2MjctNWY4NjI1ODVmZjZmOgJHQnINbmV3dGFiX3RpbGVfMnoDRU5HggFOTW96aWxsYS81LjAgKFgxMTsgVWJ1bnR1OyBMaW51eCB4ODZfNjQ7IHJ2OjE0Ni4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0Ni4wmAEBoAEBqAEDsAEDuAECwgEkN2YyZjhlNjEtM2Q5My00M2JhLTlmNjctMzZlY2Q1MDJmMDM5yAECkgHUAQrRAWh0dHBzOi8vaW1wLm10NDgubmV0L3N0YXRpYz9pZD03Ukh6Zk9JWGpGRVlzQmR2SXBrWTRDeGFmWjhtMXB4WmZaTHIxcDhyZlFibmo5d1dJQmR2SXBrWTduNFlJRmNraUdJdzVGd3FnQ2xXNFFxcjdSZVRIRjR3SkZFVWp0ZHZJcGtYZnBicjduY3E1RzR3SiUzREVRaiUzRHdWSk9kdklwa1k0Q3hhZlo4bTFweFo0UUxYNHA4JTJCNFpxbnhtWFZqdGRVakZkT0lHOHpmTHl5EiCT8Zl9of8CsdbqFVrHI4CwS2uTxPKEXouBFDsudSotTg",
+				"sponsored_tile_id": "CAMSDGpldDJob2xpZGF5cw",
+				"partner": "amp",
+				"block_key": "CAMSDGpldDJob2xpZGF5cw",
+				"favicon": "https://ads-img.mozilla.org/v1/images?image_data=CnAKbmh0dHBzOi8vYW1wLWFzc2V0LjQ1dHUxYzAuY29tL2Fzc2V0cy8xNDM4L2ExMWQwYjYxMmUxYzg1MmI5ZDMwZmYxMWUzY2FjZDE1ZjVlMTYzYWI4NzIwMWM1NGI1ZGU5NDE5ZDFiZmE0ZjIuanBnEiBpvjfUIdEKt8ob24oOjOr3nKGaN0LWnp4Lqc5NCiEPMA",
+				"faviconSize": 200,
+				"typedBonus": true
+			},
+			{
+				"isDefault": true,
+				"url": "https://www.tkmaxx.com/uk/en/?utm_source=admarketplace&utm_medium=cpc&utm_campaign=%CAMPAIGN%&utm_term=privacytiletkmaxx&utm_content=257832687338782720&mfadid=adm",
+				"hostname": "tkmaxx",
+				"sendAttributionRequest": false,
+				"label": "TK Maxx",
+				"show_sponsored_label": true,
+				"sponsored_position": 3,
+				"sponsored_click_url": "https://ads.mozilla.org/v1/t?data=CvYJEgU3NTA5ORoMCPyB8MkGENiT3d0BIgwIvYjwyQYQx_n4kgMqB1RLIE1heHgyJGMwNzRhZTFiLTg5NmUtNGNmZi1hNjI3LTVmODYyNTg1ZmY2ZjoCR0JyDW5ld3RhYl90aWxlXzN6A0VOR4IBTk1vemlsbGEvNS4wIChYMTE7IFVidW50dTsgTGludXggeDg2XzY0OyBydjoxNDYuMCkgR2Vja28vMjAxMDAxMDEgRmlyZWZveC8xNDYuMJgBAqABAagBA7ABA7gBAsIBJDdmMmY4ZTYxLTNkOTMtNDNiYS05ZjY3LTM2ZWNkNTAyZjAzOcgBA5IB_gcK-wdodHRwczovL2JyaWRnZS5wZHgxLmFkbWFya2V0cGxhY2UubmV0L2N0cD92ZXJzaW9uPTEuMC4wJmVuY3A9am5FWXhtd1ZKUWtYNVFiVWZ0SU5JJTNEd3FnQ2ZueEdFa2dDbHI0UURkZlpxWmZwOF80WkhuSG53cUklM0RFWUQlM0RjWUhGZFpnRGRTRUM0ZzNsZF9DbnZSZmtkUENDMzFzbmpfQ1J2N2pZSVdIUWtYZnBiVWZ0SWRqJTNEcXo0T0lkSW1xemZPSXV4cjNXR213cXNwa1c3bnVyaUYyemZaRGE0UTJaMXBicjdSY2RJRzdfaUYyemZRRHIxcGZZNFFMcmZaZmE0WkxZNFo4VzduZFpqOTJ6ZnRJWWolM0Q3VGdGSU5KOTR3N1Jla2olM0R3cWdDYm5JOWVRaUYyemZ0SVFqOXd2SXBrWDduNFlJRndxZ0NMbTRacW54JTNEWHZJcGtYZnBicjduM1p4JTNEN3ZJcGtYZlpxZDduM1p4JTNEY3FqbndxZ0NsWjRaRG5JOTRXSEdFcWpud3FnQ3hYZnB4bkk5NFdpRnp2SXBrWDRRMnI3bmNxeG1Ydklwa1k0Q3hhZlo4bTFweFo0UWZfNHBMcjRwMm54bVhWaiUzRF9kSkNrWjdud3ZIWmt1ZkNUdWZDVHVmQ1R1ZkNUdWZCSXdKd0VCQ3BkZkJsbFpJd0lEaXBORzRjN2YzQkRZMlJqZUlSN2tzRDRhSWMzdnNGZDJKWURZM256dzRSamdDWmpwakVONGlFN1JIWmVISmx6SWpGM1NmQ3haQ0QzSXN3N2lJUWNCRW52ZnhwTlRzbnZsQiUzRER3ZnFIbWZDRWUyUTNGMnF2WnNFM1NCYzRtRUR1U0NxSUNEck45aUZFJTJGZlJJQ2luJTJGd2ZxNyUzRHhaeHdmcUhrRXBjZDdDN3RKR3ZyNG5FbXhERXBEd05RQ2M0R0pPRFkzcWpsM3BJRkRtVFc0JTNENG9EcUVGMUVlRjRGQVp4bTR3QyUzRGNuRG1OWnhsZE94bkx3ZnFJRURjNzJKT0RZMlJFRTNaSTUzcGVTSkdJUXNxYWFCQkRZM1IlMkZ3ZnE3YUJsM2c3QzclM0RFJTNEbGtCQ2M1N0M3JTNEQ1FIWDJaM0RJRXdaZkMya0lEcW1zRl9hRW00dXNFZUlKJTNEZEdJJTNETjREUUVySm5YZ2pZRFozdERaM3RJWWolM0R6WmdCJTJGTTZRVFMxWSUyRm5IcmJ6ZnRhcmZwYlc1cGJUZlFIYTFCV1c1cGJUZkNiVzRZV1Q1dFdUaiUzRHdUSUc0VzUlM0Q3TkhtdW5pRlhUR200VkpuM2RIbXdtSTJ5eRIgcbJIglNOzdw3L7DI6EeaiFOLDaglaTmc6tuy5FSD_uM",
+				"sponsored_impression_url": "https://ads.mozilla.org/v1/t?data=CsoDEgU3NTA5ORoMCPyB8MkGENiT3d0BIgwIvYjwyQYQx_n4kgMqB1RLIE1heHgyJGMwNzRhZTFiLTg5NmUtNGNmZi1hNjI3LTVmODYyNTg1ZmY2ZjoCR0JyDW5ld3RhYl90aWxlXzN6A0VOR4IBTk1vemlsbGEvNS4wIChYMTE7IFVidW50dTsgTGludXggeDg2XzY0OyBydjoxNDYuMCkgR2Vja28vMjAxMDAxMDEgRmlyZWZveC8xNDYuMJgBAaABAagBA7ABA7gBAsIBJDdmMmY4ZTYxLTNkOTMtNDNiYS05ZjY3LTM2ZWNkNTAyZjAzOcgBA5IB0gEKzwFodHRwczovL2ltcC5tdDQ4Lm5ldC9zdGF0aWM_aWQ9N1JIemZPSVhqRkVZc0Jkdklwa1k0Q3hhZlo4bTFweFpmWkxyMXA4cmZRYm5qOXdXSUJkdklwa1k3bjRZSUZja2lHSXc1RndxZ0NMbTRacW54JTNEWE5IbUV1SUYlMkJrNUZ3cWdDbFdmcHhuSEYydXhtRVRJRjRraUZ6VTVGd3FnQzhkNFpMWmZRSGE0WmZtZlpxazFweGs0dElaSiUzRHprNUYlMkJkSkY3d3hRa1oSIIdUGsV9XMWr3NWRMZobg5S3FJw_kQXevmaxQgalvfzm",
+				"sponsored_tile_id": "CAMSB3RrIG1heHg",
+				"partner": "amp",
+				"block_key": "CAMSB3RrIG1heHg",
+				"favicon": "https://ads-img.mozilla.org/v1/images?image_data=CnAKbmh0dHBzOi8vYW1wLWFzc2V0LjQ1dHUxYzAuY29tL2Fzc2V0cy8xMzc1L2YxZjA2ZGEzNjY5OTU3ZjIzODAwNGYyNjhkN2Y2YjRlYzA0ZGEzZTVjMWY3NDE2Y2VlOWU5N2VjZGJiNmE4MmUuanBnEiA17n1t_ShutozuvSqmVI5b29CUmArd2i-LQBJbxfqaCg",
+				"faviconSize": 200,
+				"typedBonus": true
+			},
+			{
+				"isDefault": true,
+				"url": "https://www.wikipedia.org/",
+				"hostname": "wikipedia",
+				"sendAttributionRequest": false,
+				"label": "Wikipedia",
+				"tippyTopIcon": "chrome://activity-stream/content/data/content/tippytop/images/wikipedia-org@2x.png",
+				"smallFavicon": "chrome://activity-stream/content/data/content/tippytop/favicons/wikipedia-org.ico",
+				"typedBonus": true
+			},
+			{
+				"isDefault": true,
+				"url": "https://www.youtube.com/",
+				"hostname": "youtube",
+				"sendAttributionRequest": false,
+				"label": "YouTube",
+				"tippyTopIcon": "chrome://activity-stream/content/data/content/tippytop/images/youtube-com@2x.png",
+				"smallFavicon": "chrome://activity-stream/content/data/content/tippytop/favicons/youtube-com.png",
+				"typedBonus": true
+			},
+			{
+				"isDefault": true,
+				"url": "https://www.bbc.co.uk/",
+				"hostname": "bbc",
+				"sendAttributionRequest": false,
+				"label": "BBC",
+				"tippyTopIcon": "chrome://activity-stream/content/data/content/tippytop/images/bbc-uk@2x.png",
+				"smallFavicon": "chrome://activity-stream/content/data/content/tippytop/favicons/bbc-uk.ico",
+				"typedBonus": true
+			},
+			{
+				"isDefault": true,
+				"url": "https://www.reddit.com/",
+				"hostname": "reddit",
+				"sendAttributionRequest": false,
+				"label": "Reddit",
+				"tippyTopIcon": "chrome://activity-stream/content/data/content/tippytop/images/reddit-com@2x.png",
+				"smallFavicon": "chrome://activity-stream/content/data/content/tippytop/favicons/reddit-com.png",
+				"typedBonus": true
+			}
+		],
+		"editForm": null,
+		"showSearchShortcutsForm": false,
+		"searchShortcuts": [
+			{
+				"keyword": "@google",
+				"shortURL": "google",
+				"url": "https://google.com",
+				"tippyTopIcon": "chrome://activity-stream/content/data/content/tippytop/images/google-com@2x.png",
+				"smallFavicon": "chrome://activity-stream/content/data/content/tippytop/favicons/google-com.ico"
+			},
+			{
+				"keyword": "@bing",
+				"shortURL": "bing",
+				"url": "https://bing.com",
+				"tippyTopIcon": "chrome://activity-stream/content/data/content/tippytop/images/bing-com@2x.svg",
+				"smallFavicon": "chrome://activity-stream/content/data/content/tippytop/favicons/bing-com.ico"
+			},
+			{
+				"keyword": "@duckduckgo",
+				"shortURL": "duckduckgo",
+				"url": "https://duckduckgo.com",
+				"tippyTopIcon": "chrome://activity-stream/content/data/content/tippytop/images/duckduckgo-com@2x.svg",
+				"smallFavicon": "chrome://activity-stream/content/data/content/tippytop/favicons/duckduckgo-com.ico"
+			},
+			{
+				"keyword": "@ebay",
+				"shortURL": "ebay",
+				"url": "https://ebay.com",
+				"tippyTopIcon": "chrome://activity-stream/content/data/content/tippytop/images/ebay@2x.png",
+				"smallFavicon": "chrome://activity-stream/content/data/content/tippytop/favicons/ebay.ico"
+			},
+			{
+				"keyword": "@wikipedia",
+				"shortURL": "wikipedia",
+				"url": "https://wikipedia.org",
+				"tippyTopIcon": "chrome://activity-stream/content/data/content/tippytop/images/wikipedia-org@2x.png",
+				"smallFavicon": "chrome://activity-stream/content/data/content/tippytop/favicons/wikipedia-org.ico"
+			}
+		],
+		"sov": {
+			"ready": false,
+			"positions": []
+		}
+	},
+	"App": {
+		"initialized": true,
+		"locale": "en-US",
+		"isForStartupCache": {
+			"App": true,
+			"TopSites": true,
+			"DiscoveryStream": true,
+			"Weather": true,
+			"Wallpaper": true
+		},
+		"customizeMenuVisible": false
+	},
+	"Ads": {
+		"initialized": false,
+		"lastUpdated": null,
+		"tiles": {},
+		"spocs": {},
+		"spocPlacements": {}
+	},
+	"Prefs": {
+		"initialized": true,
+		"values": {
+			"default.sites": "https://www.wikipedia.org/,https://www.youtube.com/,https://www.bbc.co.uk/,https://www.reddit.com/",
+			"feeds.topsites": true,
+			"hideTopSitesTitle": false,
+			"showSponsored": true,
+			"system.showSponsored": true,
+			"showSponsoredTopSites": true,
+			"mobileDownloadModal.enabled": false,
+			"mobileDownloadModal.variant-a": false,
+			"mobileDownloadModal.variant-b": false,
+			"mobileDownloadModal.variant-c": false,
+			"discoverystream.refinedCardsLayout.enabled": true,
+			"discoverystream.merino-provider.ohttp.enabled": false,
+			"unifiedAds.ohttp.enabled": false,
+			"unifiedAds.adsFeed.enabled": false,
+			"unifiedAds.tiles.enabled": true,
+			"unifiedAds.spocs.enabled": true,
+			"unifiedAds.endpoint": "https://ads.mozilla.org/",
+			"unifiedAds.blockedAds": "",
+			"system.showWeather": false,
+			"showWeather": true,
+			"system.showWeatherOptIn": false,
+			"discoverystream.optIn-region-weather-config": "DE,GB,FR,ES,IT,CH,AT,BE,IE,NL,PL,CZ,SE,SG,HU,SK,FI,DK,NO,PT",
+			"weather.optInDisplayed": true,
+			"weather.optInAccepted": false,
+			"weather.staticData.enabled": true,
+			"weather.query": "",
+			"weather.locationSearchEnabled": true,
+			"weather.temperatureUnits": "c",
+			"weather.display": "simple",
+			"weather.placement": "header",
+			"images.smart": true,
+			"pocketCta": "{\"cta_button\":\"\",\"cta_text\":\"\",\"cta_url\":\"\",\"use_cta\":false}",
+			"showSearch": true,
+			"logowordmark.alwaysVisible": true,
+			"topSitesRows": 1,
+			"telemetry": true,
+			"telemetry.ut.events": false,
+			"telemetry.structuredIngestion.endpoint": "https://incoming.telemetry.mozilla.org/submit",
+			"telemetry.privatePing.enabled": true,
+			"telemetry.surfaceId": "",
+			"telemetry.privatePing.redactNewtabPing.enabled": true,
+			"telemetry.privatePing.inferredInterests.enabled": false,
+			"section.highlights.includeVisited": true,
+			"section.highlights.includeBookmarks": true,
+			"section.highlights.includeDownloads": true,
+			"section.highlights.rows": 1,
+			"section.topstories.rows": 1,
+			"sectionOrder": "topsites,topstories,highlights",
+			"newtabWallpapers.enabled": true,
+			"newtabWallpapers.customColor.enabled": true,
+			"newtabWallpapers.customWallpaper.enabled": true,
+			"newtabWallpapers.customWallpaper.uuid": "",
+			"newtabWallpapers.customWallpaper.uploadedPreviously": false,
+			"newtabWallpapers.customWallpaper.fileSize.enabled": false,
+			"newtabWallpapers.customWallpaper.fileSize": 0,
+			"newtabWallpapers.customWallpaper.theme": "",
+			"newtabAdSize.leaderboard": false,
+			"newtabAdSize.leaderboard.position": "3",
+			"newtabAdSize.billboard": false,
+			"newtabAdSize.billboard.position": "3",
+			"newtabAdSize.mediumRectangle": false,
+			"discoverystream.promoCard.enabled": false,
+			"discoverystream.promoCard.visible": true,
+			"discoverystream.sections.enabled": false,
+			"discoverystream.sections.personalization.enabled": false,
+			"discoverystream.sections.customizeMenuPanel.enabled": false,
+			"discoverystream.sections.cards.enabled": true,
+			"discoverystream.sections.contextualAds.enabled": false,
+			"discoverystream.sections.personalization.inferred.enabled": false,
+			"discoverystream.dailyBrief.enabled": false,
+			"discoverystream.dailyBrief.sectionId": "top_stories_section",
+			"discoverystream.shortcuts.personalization.enabled": false,
+			"discoverystream.shortcuts.force_log.enabled": false,
+			"discoverystream.attribution.enabled": false,
+			"discoverystream.sections.personalization.inferred.user.enabled": true,
+			"discoverystream.sections.personalization.inferred.model.override": "",
+			"discoverystream.sections.cards.thumbsUpDown.enabled": true,
+			"discoverystream.reportAds.enabled": true,
+			"discoverystream.sections.following": "",
+			"discoverystream.sections.blocked": "",
+			"discoverystream.sections.interestPicker.enabled": false,
+			"discoverystream.sections.interestPicker.visibleSections": "",
+			"discoverystream.spoc-positions": "2,4,8,13,17,20",
+			"discoverystream.placements.contextualSpocs": "newtab_stories_1, newtab_stories_2, newtab_stories_3, newtab_stories_4, newtab_stories_5, newtab_stories_6",
+			"discoverystream.placements.contextualSpocs.counts": "1, 1, 1, 1, 1, 1",
+			"discoverystream.placements.contextualBanners": "",
+			"discoverystream.placements.contextualBanners.counts": "",
+			"discoverystream.placements.spocs": "newtab_stories_1, newtab_stories_2, newtab_stories_3, newtab_stories_4, newtab_stories_5, newtab_stories_6",
+			"discoverystream.placements.spocs.counts": "1,1,1,1,1,1",
+			"discoverystream.placements.tiles": "newtab_tile_1, newtab_tile_2, newtab_tile_3",
+			"discoverystream.placements.tiles.counts": "1, 1, 1",
+			"newtabWallpapers.highlightEnabled": false,
+			"newtabWallpapers.highlightDismissed": false,
+			"newtabWallpapers.highlightSeenCounter": 0,
+			"newtabWallpapers.highlightHeaderText": "",
+			"newtabWallpapers.highlightContentText": "",
+			"newtabWallpapers.highlightCtaText": "",
+			"newtabWallpapers.wallpaper": "",
+			"trendingSearch.enabled": true,
+			"trendingSearch.variant": "",
+			"system.trendingSearch.enabled": false,
+			"trendingSearch.defaultSearchEngine": "Google",
+			"widgets.system.enabled": false,
+			"widgets.lists.enabled": true,
+			"widgets.lists.maxLists": 10,
+			"widgets.lists.maxListItems": 100,
+			"widgets.system.lists.enabled": false,
+			"widgets.lists.interaction": false,
+			"widgets.lists.badge.enabled": false,
+			"widgets.lists.badge.label": "",
+			"widgets.focusTimer.enabled": true,
+			"widgets.system.focusTimer.enabled": false,
+			"widgets.focusTimer.interaction": false,
+			"widgets.focusTimer.showSystemNotifications": false,
+			"improvesearch.noDefaultSearchTile": true,
+			"improvesearch.topSiteSearchShortcuts.searchEngines": "google,amazon",
+			"improvesearch.topSiteSearchShortcuts.havePinned": "",
+			"asrouter.devtoolsEnabled": false,
+			"discoverystream.flight.blocks": "{}",
+			"discoverystream.config": "{\"collapsible\":true,\"enabled\":true}",
+			"discoverystream.endpoints": "https://getpocket.cdn.mozilla.net/,https://firefox-api-proxy.cdn.mozilla.net/,https://spocs.getpocket.com/,https://merino.services.mozilla.com/,https://ads.mozilla.org/",
+			"discoverystream.thumbsUpDown.enabled": false,
+			"discoverystream.thumbsUpDown.searchTopsitesCompact": true,
+			"discoverystream.region-basic-layout": false,
+			"discoverystream.spoc.impressions": "{}",
+			"discoverystream.endpointSpocsClear": "https://spocs.getpocket.com/user",
+			"discoverystream.rec.impressions": "{}",
+			"discoverystream.topicSelection.enabled": false,
+			"discoverystream.topicSelection.topics": "business, arts, food, health, finance, government, sports, tech, travel, education-science, society",
+			"discoverystream.topicSelection.selectedTopics": "",
+			"discoverystream.topicSelection.suggestedTopics": "business, arts, government",
+			"discoverystream.topicSelection.hasBeenUpdatedPreviously": false,
+			"discoverystream.topicSelection.onboarding.displayCount": 0,
+			"discoverystream.topicSelection.onboarding.maybeDisplay": true,
+			"discoverystream.topicSelection.onboarding.lastDisplayed": "",
+			"discoverystream.topicSelection.onboarding.displayTimeout": 0,
+			"discoverystream.topicSelection.onboarding.enabled": false,
+			"discoverystream.topicLabels.enabled": false,
+			"discoverystream.spocs.onDemand": false,
+			"discoverystream.spocs.startupCache.enabled": false,
+			"discoverystream.publisherFavicon.enabled": true,
+			"support.url": "https://support.mozilla.org/1/firefox/146.0/Linux/en-US/new-tab",
+			"caretBlinkCount": 5,
+			"caretBlinkTime": 1200,
+			"showSponsoredCheckboxes": true,
+			"feeds.aboutpreferences": true,
+			"feeds.newtabinit": true,
+			"feeds.places": true,
+			"feeds.prefs": true,
+			"feeds.sections": true,
+			"feeds.startupcacheinit": true,
+			"feeds.section.highlights": false,
+			"feeds.system.topstories": true,
+			"feeds.systemtick": true,
+			"feeds.telemetry": true,
+			"feeds.favicon": true,
+			"feeds.system.topsites": true,
+			"feeds.recommendationprovider": true,
+			"feeds.discoverystreamfeed": true,
+			"feeds.wallpaperfeed": true,
+			"feeds.weatherfeed": true,
+			"feeds.adsfeed": true,
+			"feeds.inferredpersonalizationfeed": true,
+			"feeds.smartshortcutsfeed": true,
+			"feeds.newtabattributionfeed": true,
+			"feeds.newtabmessaging": true,
+			"feeds.trendingsearchfeed": true,
+			"feeds.listsfeed": true,
+			"feeds.timerfeed": true,
+			"isPrivateBrowsingEnabled": true,
+			"platform": "linux",
+			"region": "GB",
+			"fxa_endpoint": "https://accounts.firefox.com/",
+			"appUpdateChannel": "release",
+			"improvesearch.topSiteSearchShortcuts": true,
+			"mayHaveSponsoredTopSites": true,
+			"improvesearch.handoffToAwesomebar": true,
+			"featureConfig": {
+				"customizationMenuEnabled": null,
+				"topSitesContileEnabled": true
+			},
+			"pocketConfig": {
+				"spocTopsitesPositions": "2",
+				"contileTopsitesPositions": "0,1,2",
+				"spocAdTypes": "",
+				"spocZoneIds": "",
+				"spocTopsitesAdTypes": "",
+				"spocTopsitesZoneIds": "",
+				"spocTopsitesPlacementEnabled": true,
+				"spocSiteId": "",
+				"widgetPositions": "",
+				"hybridLayout": false,
+				"hideCardBackground": false,
+				"fourCardLayout": false,
+				"newFooterSection": false,
+				"hideDescriptions": true,
+				"hideDescriptionsRegions": "",
+				"compactGrid": false,
+				"compactImages": false,
+				"imageGradient": false,
+				"titleLines": 3,
+				"descLines": 3,
+				"readTime": true,
+				"newSponsoredLabel": false,
+				"recsPersonalized": false,
+				"spocsPersonalized": true,
+				"ctaButtonSponsors": "",
+				"ctaButtonVariant": "",
+				"regionStoriesConfig": "US,DE,CA,GB,IE,CH,AT,BE,IN,FR,IT,ES",
+				"merinoProviderEndpoint": "merino.services.mozilla.com",
+				"regionStoriesBlock": "",
+				"localeListConfig": "",
+				"regionSpocsConfig": "US,CA,DE,GB,FR,IT,ES",
+				"topSitesContileSovEnabled": true,
+				"pocketFeedParameters": "",
+				"pocketStoriesHeadlineId": "newtab-section-header-stories"
+			},
+			"smartShortcutsConfig": {},
+			"widgetsConfig": {},
+			"feeds.section.topstories": true,
+			"discoverystream.enabled": true,
+			"discoverystream.hardcoded-basic-layout": false,
+			"discoverystream.personalization.enabled": true,
+			"discoverystream.personalization.override": false,
+			"discoverystream.personalization.modelKeys": "nb_model_arts_and_entertainment, nb_model_autos_and_vehicles, nb_model_beauty_and_fitness, nb_model_blogging_resources_and_services, nb_model_books_and_literature, nb_model_business_and_industrial, nb_model_computers_and_electronics, nb_model_finance, nb_model_food_and_drink, nb_model_games, nb_model_health, nb_model_hobbies_and_leisure, nb_model_home_and_garden, nb_model_internet_and_telecom, nb_model_jobs_and_education, nb_model_law_and_government, nb_model_online_communities, nb_model_people_and_society, nb_model_pets_and_animals, nb_model_real_estate, nb_model_reference, nb_model_science, nb_model_shopping, nb_model_sports, nb_model_travel",
+			"discoverystream.spocs-endpoint": "",
+			"discoverystream.spocs-endpoint-query": "",
+			"newNewtabExperience.colors": "#004CA4,#009E97,#7550C2,#B63B39,#C96A00,#CA9600,#CC527F"
+		}
+	},
+	"Dialog": {
+		"visible": false,
+		"data": {}
+	},
+	"Sections": [
+		{
+			"title": {
+				"id": "newtab-section-header-stories"
+			},
+			"rows": [],
+			"enabled": true,
+			"id": "topstories",
+			"pref": {
+				"titleString": {
+					"id": "home-prefs-recommended-by-header-generic"
+				},
+				"descString": {
+					"id": "home-prefs-recommended-by-description-generic"
+				},
+				"nestedPrefs": [
+					{
+						"name": "showSponsored",
+						"titleString": "home-prefs-recommended-by-option-sponsored-stories",
+						"icon": "icon-info",
+						"eventSource": "POCKET_SPOCS"
+					}
+				],
+				"learnMore": {
+					"link": {
+						"href": "https://getpocket.com/firefox/new_tab_learn_more",
+						"id": "home-prefs-recommended-by-learn-more"
+					}
+				},
+				"feed": "feeds.section.topstories"
+			},
+			"eventSource": "TOP_STORIES",
+			"learnMore": {
+				"link": {
+					"href": "https://getpocket.com/firefox/new_tab_learn_more",
+					"message": {
+						"id": "newtab-pocket-learn-more"
+					}
+				}
+			},
+			"compactCards": false,
+			"rowsPref": "section.topstories.rows",
+			"maxRows": 4,
+			"availableLinkMenuOptions": [
+				"CheckBookmark",
+				"Separator",
+				"OpenInNewWindow",
+				"OpenInPrivateWindow",
+				"Separator",
+				"BlockUrl"
+			],
+			"emptyState": {
+				"message": {
+					"id": "newtab-empty-section-topstories-generic"
+				},
+				"icon": "check"
+			},
+			"shouldSendImpressionStats": true,
+			"dedupeFrom": [
+				"highlights"
+			],
+			"options": {},
+			"contextMenuOptions": [
+				"CheckBookmark",
+				"Separator",
+				"OpenInNewWindow",
+				"OpenInPrivateWindow",
+				"Separator",
+				"BlockUrl"
+			],
+			"initialized": false,
+			"dedupeConfigurations": [
+				{
+					"id": "topstories",
+					"dedupeFrom": [
+						"highlights"
+					]
+				}
+			]
+		},
+		{
+			"title": {
+				"id": "newtab-section-header-recent-activity"
+			},
+			"rows": [],
+			"enabled": false,
+			"id": "highlights",
+			"pref": {
+				"titleString": {
+					"id": "home-prefs-recent-activity-header"
+				},
+				"descString": {
+					"id": "home-prefs-recent-activity-description"
+				},
+				"nestedPrefs": [
+					{
+						"name": "section.highlights.includeVisited",
+						"titleString": "home-prefs-highlights-option-visited-pages"
+					},
+					{
+						"name": "section.highlights.includeBookmarks",
+						"titleString": "home-prefs-highlights-options-bookmarks"
+					},
+					{
+						"name": "section.highlights.includeDownloads",
+						"titleString": "home-prefs-highlights-option-most-recent-download"
+					}
+				],
+				"feed": "feeds.section.highlights"
+			},
+			"shouldHidePref": false,
+			"eventSource": "HIGHLIGHTS",
+			"icon": "chrome://global/skin/icons/highlights.svg",
+			"compactCards": true,
+			"rowsPref": "section.highlights.rows",
+			"maxRows": 4,
+			"emptyState": {
+				"message": {
+					"id": "newtab-empty-section-highlights"
+				},
+				"icon": "chrome://global/skin/icons/highlights.svg"
+			},
+			"shouldSendImpressionStats": false,
+			"options": {},
+			"initialized": false
+		}
+	],
+	"Messages": {
+		"isVisible": true,
+		"portID": "",
+		"messageData": {}
+	},
+	"Notifications": {
+		"showNotifications": false,
+		"toastCounter": 0,
+		"toastId": "",
+		"toastQueue": []
+	},
+	"Pocket": {
+		"pocketCta": {},
+		"waitingForSpoc": true
+	},
+	"Personalization": {
+		"lastUpdated": 1762858682917,
+		"initialized": true
+	},
+	"InferredPersonalization": {
+		"initialized": false,
+		"lastUpdated": null,
+		"inferredInterests": {},
+		"coarseInferredInterests": {},
+		"coarsePrivateInferredInterests": {}
+	},
+	"DiscoveryStream": {
+		"config": {
+			"collapsible": true,
+			"enabled": true
+		},
+		"layout": [
+			{
+				"width": 12,
+				"components": [
+					{
+						"type": "TopSites",
+						"header": {
+							"title": {
+								"id": "newtab-section-header-topsites"
+							}
+						},
+						"properties": {}
+					},
+					{
+						"type": "Message",
+						"header": {
+							"title": {
+								"id": "newtab-section-header-stories"
+							},
+							"subtitle": "",
+							"link_text": {
+								"id": "newtab-pocket-learn-more"
+							},
+							"link_url": "",
+							"icon": "chrome://global/skin/icons/pocket.svg"
+						},
+						"styles": {
+							".ds-message": "margin-block-end: -20px"
+						}
+					},
+					{
+						"type": "CardGrid",
+						"properties": {
+							"items": 24,
+							"hybridLayout": false,
+							"hideCardBackground": false,
+							"fourCardLayout": false,
+							"compactGrid": false,
+							"ctaButtonSponsors": [
+								""
+							],
+							"ctaButtonVariant": ""
+						},
+						"widgets": {
+							"positions": [],
+							"data": [
+								{
+									"type": "TopicsWidget"
+								}
+							]
+						},
+						"cta_variant": "link",
+						"header": {
+							"title": ""
+						},
+						"placement": {
+							"name": "newtab_spocs",
+							"ad_types": [
+								3617
+							],
+							"zone_ids": [
+								217758,
+								217995
+							]
+						},
+						"feed": {
+							"embed_reference": null,
+							"url": "https://merino.services.mozilla.com/api/v1/curated-recommendations"
+						},
+						"spocs": {
+							"probability": 1,
+							"positions": [
+								{
+									"index": 2
+								},
+								{
+									"index": 4
+								},
+								{
+									"index": 8
+								},
+								{
+									"index": 13
+								},
+								{
+									"index": 17
+								},
+								{
+									"index": 20
+								}
+							]
+						}
+					},
+					{
+						"type": "Navigation",
+						"newFooterSection": false,
+						"properties": {
+							"alignment": "left-align",
+							"extraLinks": [
+								{
+									"name": "Career",
+									"url": "https://getpocket.com/explore/career?utm_source=pocket-newtab"
+								},
+								{
+									"name": "Technology",
+									"url": "https://getpocket.com/explore/technology?utm_source=pocket-newtab"
+								}
+							],
+							"privacyNoticeURL": {
+								"url": "https://www.mozilla.org/privacy/firefox/#recommend-relevant-content",
+								"title": {
+									"id": "newtab-section-menu-privacy-notice"
+								}
+							}
+						},
+						"styles": {
+							".ds-navigation": "margin-block-start: -10px;"
+						}
+					}
+				]
+			}
+		],
+		"topicsLoading": false,
+		"feeds": {
+			"data": {
+				"https://merino.services.mozilla.com/api/v1/curated-recommendations": {
+					"lastUpdated": 1765540215165,
+					"personalized": true,
+					"sectionsEnabled": false,
+					"data": {
+						"settings": {},
+						"sections": [],
+						"interestPicker": {},
+						"recommendations": [
+							{
+								"id": "d57f0417-7fbf-4a3e-a3dd-890c4b5abb51",
+								"scheduled_corpus_item_id": "e4a2a921-971c-448f-8a92-031ce26fe4c0",
+								"corpus_item_id": "d57f0417-7fbf-4a3e-a3dd-890c4b5abb51",
+								"features": {
+									"t_government": 1
+								},
+								"excerpt": "Barry Dawson was shot through the front window of his terraced house in Stanley in April.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/e6248bdb09dcdf9a47f37ebc40a60885c96d0190b8bec416ec79cb800c984602_11160.png",
+								"isTimeSensitive": true,
+								"publisher": "Sky",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/35733a62-4c8d-48a7-9149-6ce4c4a4edfe.jpeg",
+								"received_rank": 0,
+								"recommended_at": 1765540215036,
+								"title": "Three Men Jailed for Life After Man, 60, Shot Dead Through Living Room Window in County Durham",
+								"topic": "government",
+								"url": "https://news.sky.com/story/three-men-jailed-for-life-after-man-60-shot-dead-through-window-in-county-durham-13482063?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "20408ead-a839-4d97-9588-6df312ba1f1d",
+								"scheduled_corpus_item_id": "27a00199-21dd-48f5-b50a-b5e4c529136e",
+								"corpus_item_id": "20408ead-a839-4d97-9588-6df312ba1f1d",
+								"features": {
+									"t_education-science": 1
+								},
+								"excerpt": "Ever notice how your dog always looks vaguely heartbroken when you feel good? It's not just you, it's human psychology.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/59a371c0af22cd7ed0fdbe74a979cd0f726ff3d24b596b9883ebdc06a95dc47c_2544.webp",
+								"isTimeSensitive": false,
+								"publisher": "VICE",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/97abbb37-2797-47f8-9792-78e2014b01ff.jpeg",
+								"received_rank": 1,
+								"recommended_at": 1765540215036,
+								"title": "Why Your Dog Always Looks Sad When You Feel Happy",
+								"topic": "education-science",
+								"url": "https://www.vice.com/en/article/why-your-dog-always-looks-sad-when-you-feel-happy/?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "d7061fc6-0de4-4a61-91dd-4ccd02780683",
+								"scheduled_corpus_item_id": "5a8dda64-b284-4c43-a4cc-ee469580b6a7",
+								"corpus_item_id": "d7061fc6-0de4-4a61-91dd-4ccd02780683",
+								"features": {
+									"t_food": 1
+								},
+								"excerpt": "’Tis the season for novelty crisps – from the delicious to the downright deranged. ",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/6df36ad9a79866d419c73bbf94be4570fa025203cdd43f49a750b4d6d2b3b3de_411.svg",
+								"isTimeSensitive": false,
+								"publisher": "The Guardian",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/fab05fbc-1229-4c41-be04-80129e0d70f7.jpeg",
+								"received_rank": 2,
+								"recommended_at": 1765540215036,
+								"title": "‘Best Eaten With a Hangover’: The Best (and Worst) Supermarket Christmas Crisps, Tasted and Rated",
+								"topic": "food",
+								"url": "https://www.theguardian.com/thefilter/2025/dec/05/best-supermarket-christmas-crisps?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "aef6329b-544d-47c0-a431-444f8cf2918a",
+								"scheduled_corpus_item_id": "4464e102-f43b-4785-9d67-24ffe216d905",
+								"corpus_item_id": "aef6329b-544d-47c0-a431-444f8cf2918a",
+								"features": {
+									"t_sports": 1
+								},
+								"excerpt": "Lando Norris may be F1 champion on the track, but it’s a different story in the race to financial supremacy as the sport’s top ten earners revved up an estimated $363 million in salary and bonuses this year.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/cea57c26eabac2ae24eda69de50ff7c67e3d57ad393c43904a68b51b9e6aca44_2509.png",
+								"isTimeSensitive": false,
+								"publisher": "Forbes",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/b088fd2a-c69c-481a-9fbe-31cc83af905a.png",
+								"received_rank": 3,
+								"recommended_at": 1765540215036,
+								"title": "Formula 1’s Highest-Paid Drivers 2025",
+								"topic": "sports",
+								"url": "https://www.forbes.com/sites/brettknight/2025/12/09/formula-1s-highest-paid-drivers-2025/?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "ae4cc21d-83f2-413a-92de-e779f69e7287",
+								"scheduled_corpus_item_id": "91f3e63e-c73c-434e-8456-4cfb3bad22a9",
+								"corpus_item_id": "ae4cc21d-83f2-413a-92de-e779f69e7287",
+								"features": {
+									"t_health": 1
+								},
+								"excerpt": "Pilates workouts aren’t going anywhere for 2026. Strength has become the new health currency, and suddenly everyone’s rolling out a Pilates mat: your friends in their thirties, your neighbours in their fifties, even relatives in their seventies.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/5cd49dbfb4c2805fc9b1604890e8780aa013b7b7cab1aad81ab3dbb8fc49ad78_1487.png",
+								"isTimeSensitive": false,
+								"publisher": "Marie Claire UK",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/f3846b60-c01d-41b0-8631-92d717377f97.jpeg",
+								"received_rank": 4,
+								"recommended_at": 1765540215036,
+								"title": "World Renowned Pilates Instructors Confirm: You Can Get Stronger At Any Age With These 3 Simple At-Home Moves",
+								"topic": "health",
+								"url": "https://www.marieclaire.co.uk/life/health-fitness/best-strength-building-pilates-exercises?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "35f60360-163a-4f56-ac71-61149e74d652",
+								"scheduled_corpus_item_id": "c4861b0d-f318-4349-b87a-d14c9b7d30ff",
+								"corpus_item_id": "35f60360-163a-4f56-ac71-61149e74d652",
+								"features": {
+									"t_arts": 1
+								},
+								"excerpt": "With his Netflix series The Reckoning, 50 makes good on his promise to tell the story of Sean Combs’ rise and fall—but he insists the project isn’t motivated by personal beef.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/cb03c351a69acdeff9933a6a186a4739a3894011b4eecef241813a76319b009d_7406.oct",
+								"isTimeSensitive": false,
+								"publisher": "British GQ",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/c74fee69-f3d3-4702-9ab5-576206e3db80.jpeg",
+								"received_rank": 5,
+								"recommended_at": 1765540215036,
+								"title": "50 Cent Explains Why He Made a Diddy Docuseries",
+								"topic": "arts",
+								"url": "https://www.gq-magazine.co.uk/article/50-cent-explains-why-he-made-a-diddy-docuseries?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "9ca15cff-9b5b-4f17-89ca-ed895b91188f",
+								"scheduled_corpus_item_id": "9afdf92f-5bc4-46e7-9224-23edd5e54557",
+								"corpus_item_id": "9ca15cff-9b5b-4f17-89ca-ed895b91188f",
+								"features": {
+									"t_government": 1
+								},
+								"excerpt": "Treasury committee will examine agency’s forecasting record and discover where it ‘needs to do better.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/6df36ad9a79866d419c73bbf94be4570fa025203cdd43f49a750b4d6d2b3b3de_411.svg",
+								"isTimeSensitive": false,
+								"publisher": "The Guardian",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/db974e4a-269e-4ac9-8c7e-d4d394bc3d39.jpeg",
+								"received_rank": 6,
+								"recommended_at": 1765540215036,
+								"title": "MPs Announce Inquiry Into Work of Office for Budget Responsibility",
+								"topic": "government",
+								"url": "https://www.theguardian.com/business/2025/dec/12/mps-anounce-inquiry-office-for-budget-responsibility?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "c25fbd73-ead0-4e30-ac63-845c173c913f",
+								"scheduled_corpus_item_id": "b1e83cfb-ece5-4d14-b6de-f263f0dc9320",
+								"corpus_item_id": "c25fbd73-ead0-4e30-ac63-845c173c913f",
+								"features": {
+									"t_food": 1
+								},
+								"excerpt": "From the capital to the coastal corners of Cornwall, these are the bakes worth plotting an adventure around, across the country",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/cd106eb7ed622a5a6cac356a451ba55490d5d67091ef5cd5202a139814aa06fb_7406.oct",
+								"isTimeSensitive": false,
+								"publisher": "Condé Nast Traveller",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/7b2d8288-a953-4967-b179-2d21109d980e.jpeg",
+								"received_rank": 7,
+								"recommended_at": 1765540215036,
+								"title": "10 Best Bakeries in the UK Worth Travelling For",
+								"topic": "food",
+								"url": "https://www.cntraveller.com/article/uk-bakeries-worth-travelling-for?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "77184ece-ee4d-4aec-8bb2-ca1c1f598c61",
+								"scheduled_corpus_item_id": "0b1636e4-f9dd-4a6c-ae97-01b2d63f91cf",
+								"corpus_item_id": "77184ece-ee4d-4aec-8bb2-ca1c1f598c61",
+								"features": {
+									"t_hobbies": 1
+								},
+								"excerpt": "Microsoft has suggested more classic Xbox titles could be heading to Game Pass next year.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/2147bd951ca8ec0154c76dec81201705078283d4a8c4abd917bdda03208545b2_3576.png",
+								"isTimeSensitive": false,
+								"publisher": "Eurogamer",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/b901c203-7c20-47b9-988d-2102cf0a5a0d.jpeg",
+								"received_rank": 8,
+								"recommended_at": 1765540215036,
+								"title": "Sad Your Favourite OG Xbox Game Is Missing From Game Pass? Microsoft Suggests That Might Change Next Year",
+								"topic": "hobbies",
+								"url": "https://www.eurogamer.net/sad-your-favourite-og-xbox-game-is-missing-from-game-pass-that-might-change-next-year?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "f67fc65f-5bd6-4de3-8513-50e25c5077e7",
+								"scheduled_corpus_item_id": "6d2816f4-7e7a-465e-a40c-362f348574ac",
+								"corpus_item_id": "f67fc65f-5bd6-4de3-8513-50e25c5077e7",
+								"features": {
+									"t_health": 1
+								},
+								"excerpt": "Numbers in hospital rise by more than 50% in a week as NHS faces \"worst-case scenario\".",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/d0f00be7897e8d574ede9be7c4af8c3b8c6cbbd327e78b90aa08fc348f77a844_397.png",
+								"isTimeSensitive": true,
+								"publisher": "BBC",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/b63f0853-6e0e-4ff8-994b-63e3582b1937.jpeg",
+								"received_rank": 9,
+								"recommended_at": 1765540215036,
+								"title": "‘Super Flu’ Wave Hits Hospitals in England With No Peak Yet",
+								"topic": "health",
+								"url": "https://www.bbc.co.uk/news/articles/c8r30787e76o?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "dc9ac34c-6aee-41ba-a84e-b7979d899f81",
+								"scheduled_corpus_item_id": "17c320b2-6261-4ade-8325-5dbdca9b1950",
+								"corpus_item_id": "dc9ac34c-6aee-41ba-a84e-b7979d899f81",
+								"features": {
+									"t_education": 1
+								},
+								"excerpt": "Students’ communication skills are eroding warn Stanford lecturers Rachel Konrad and Matt Abrahams.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/6bdc80aaa6508bbb127c62edd064b3228c6d36877042236992650de6e35558d6_2342.png",
+								"isTimeSensitive": false,
+								"publisher": "Time",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/86a23061-d5c7-4fe8-87c4-2dfd8b723837.jpeg",
+								"received_rank": 10,
+								"recommended_at": 1765540215036,
+								"title": "Why Young People are Struggling to Communicate",
+								"topic": "education",
+								"url": "https://time.com/7339501/young-people-struggling-to-communicate/?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "ea9ca5a8-4c03-49a2-9d29-debb8cd8d931",
+								"scheduled_corpus_item_id": "c659728d-3e58-4427-b6a5-fcf7eb765d8c",
+								"corpus_item_id": "ea9ca5a8-4c03-49a2-9d29-debb8cd8d931",
+								"features": {
+									"t_tech": 1
+								},
+								"excerpt": "Your photos hide more than pixels—they carry data that can reveal where you were and what you used.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/7cf2eb55dab55931df23cbf55441db941d2b72341184441ccc6784e54a95e76d_3833.png",
+								"isTimeSensitive": false,
+								"publisher": "MakeUseOf",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/e8ed398b-d432-42b8-b233-cc2d865fe89d.jpeg",
+								"received_rank": 11,
+								"recommended_at": 1765540215036,
+								"title": "Your Images Carry Invisible Data You’ve Probably Never Checked",
+								"topic": "tech",
+								"url": "https://www.makeuseof.com/images-carry-invisible-data-youve-never-checked/?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "056f6c50-0dd6-4b5b-a01c-f8a9bec9bb01",
+								"scheduled_corpus_item_id": "fa292e95-a06c-4130-b00b-55b97f959400",
+								"corpus_item_id": "056f6c50-0dd6-4b5b-a01c-f8a9bec9bb01",
+								"features": {
+									"t_education": 1
+								},
+								"excerpt": "Three esoteric stores dominate London’s occult scene. Chris Dorrell makes a pilgrimage to all of them and receives some chilling news.",
+								"icon_src": null,
+								"isTimeSensitive": false,
+								"publisher": "CityAM",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/5517de74-446d-45fc-94d3-f11a3026318d.jpeg",
+								"received_rank": 12,
+								"recommended_at": 1765540215036,
+								"title": "Inside London’s Occult Bookshops",
+								"topic": "education",
+								"url": "https://www.cityam.com/inside-londons-occult-bookshops/?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "cef44811-a81e-4a34-9cf6-82adb5c28364",
+								"scheduled_corpus_item_id": "ca88c6ab-7b56-4f7a-9891-62b331b17eec",
+								"corpus_item_id": "cef44811-a81e-4a34-9cf6-82adb5c28364",
+								"features": {
+									"t_tech": 1
+								},
+								"excerpt": "In 1975, a young engineer in the company that made Kodak film took the first picture on a handheld digital camera. Photography would never be the same again.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/388231ac048528715ffc2aebad84b58c19231d92156179d21c94d0b98d4f1d9b_751.svg",
+								"isTimeSensitive": false,
+								"publisher": "BBC",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/51f7c573-6b24-45a3-82e6-2033bb23d20f.webp",
+								"received_rank": 13,
+								"recommended_at": 1765540215036,
+								"title": "A ‘Toaster With a Lens’: The Story Behind the First Handheld Digital Camera",
+								"topic": "tech",
+								"url": "https://www.bbc.com/future/article/20251205-how-the-handheld-digital-camera-was-born?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "0aff21fe-aae2-4043-a369-25125fa89078",
+								"scheduled_corpus_item_id": "571d3c7b-47d6-45fb-b468-0b5f2c94e7dc",
+								"corpus_item_id": "0aff21fe-aae2-4043-a369-25125fa89078",
+								"features": {
+									"t_society-parenting": 1
+								},
+								"excerpt": "All I want for Christmas is a day off.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/6b188564fc44be5d427269a5fe14065a56952bffe97ffa7ddac712c69ebe33ea_9662.oct",
+								"isTimeSensitive": false,
+								"publisher": "Glamour Magazine",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/da7fd471-b3cd-485e-a86e-8f99a90f3241.jpeg",
+								"received_rank": 14,
+								"recommended_at": 1765540215036,
+								"title": "Exhausted by the Emotional Labour of Christmas? You May Be Your Family’s ‘Kinkeeper’",
+								"topic": "society-parenting",
+								"url": "https://www.glamourmagazine.co.uk/article/kin-keeping-christmas?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "5de2decd-6f86-46bc-98aa-004007135511",
+								"scheduled_corpus_item_id": "c8994584-9cda-420b-a007-6c8775702836",
+								"corpus_item_id": "5de2decd-6f86-46bc-98aa-004007135511",
+								"features": {
+									"t_society": 1
+								},
+								"excerpt": "We consistently underestimate how much other people like us, and it may be hurting our social lives.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/028bfe8b138aee4f731cf68d211494820446831ea5c9cdc8b500f84a8b7b9480_5758.png",
+								"isTimeSensitive": false,
+								"publisher": "Vox",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/1938b63c-ae39-466e-9fad-d6d487b606de.jpeg",
+								"received_rank": 15,
+								"recommended_at": 1765540215036,
+								"title": "People Are Nicer Than You Think",
+								"topic": "society",
+								"url": "https://www.vox.com/life/471602/loneliness-fix-new-friends?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "ac83e952-6fdd-4270-ab52-ad48e602d7dc",
+								"scheduled_corpus_item_id": "9b3ca7e1-247d-4861-9a6e-0ab6246fc0df",
+								"corpus_item_id": "ac83e952-6fdd-4270-ab52-ad48e602d7dc",
+								"features": {
+									"t_society-parenting": 1
+								},
+								"excerpt": "Male fertility rates are dropping and yet women in heterosexual relationships are still carrying the burden. Here's what couples need to know.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/f3d1afe17bd1b560d8f96e98365110e23840b52305d3f20a7d5927f3c6c78685_1844.oct",
+								"isTimeSensitive": false,
+								"publisher": "Parents",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/82415523-5bd7-42bb-8db0-aaf840df24e7.jpeg",
+								"received_rank": 16,
+								"recommended_at": 1765540215036,
+								"title": "Why Male Fertility Matters More Than Ever—and What You Can Do About It",
+								"topic": "society-parenting",
+								"url": "https://www.parents.com/why-male-fertility-matters-more-than-ever-11859883?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "721a1a60-a980-4e44-a9ce-38a8d07493b1",
+								"scheduled_corpus_item_id": "b5a5de9b-022b-4e43-8e74-95af99885d22",
+								"corpus_item_id": "721a1a60-a980-4e44-a9ce-38a8d07493b1",
+								"features": {
+									"t_finance": 1
+								},
+								"excerpt": "Handmade gifts are definitely not just for children. Here, the experts show us how to do it with style.",
+								"icon_src": null,
+								"isTimeSensitive": false,
+								"publisher": "House & Garden",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/713d8953-fef5-42d2-ab30-def82222adc8.jpeg",
+								"received_rank": 17,
+								"recommended_at": 1765540215036,
+								"title": "Five Ideas for Homemade Christmas Presents That Everyone Will Love",
+								"topic": "finance",
+								"url": "https://www.houseandgarden.co.uk/article/ideas-for-homemade-christmas-presents?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "a9ecfd78-f6e7-4458-8026-1f248d832d66",
+								"scheduled_corpus_item_id": "dceb75bb-2f07-4205-8c73-c8659f83e7c7",
+								"corpus_item_id": "a9ecfd78-f6e7-4458-8026-1f248d832d66",
+								"features": {
+									"t_health": 1
+								},
+								"excerpt": "Salty drinks are all the rage – but they should be a tool, not a daily must-have.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/79f5d221252b6e365e0391d67ab857c44d2fb00f7bcaa6d0a12e9ac36fffbd58_5213.png",
+								"isTimeSensitive": false,
+								"publisher": "Men's Health",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/4efd6ed2-2d48-42b4-8ada-ea01db74dc96.jpeg",
+								"received_rank": 18,
+								"recommended_at": 1765540215036,
+								"title": "You Don’t Need Daily Electrolyte Drinks – Here’s When They Actually Help",
+								"topic": "health",
+								"url": "https://www.menshealth.com/uk/nutrition/food-drink/a69642327/can-drink-electrolytes-every-day/?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "b6ea07af-be84-43fc-823a-748091dc87b1",
+								"scheduled_corpus_item_id": "6e18f89a-774f-488c-bc57-2ab147bceda3",
+								"corpus_item_id": "b6ea07af-be84-43fc-823a-748091dc87b1",
+								"features": {
+									"t_home": 1
+								},
+								"excerpt": "Some of the hardest kitchen tasks are cleaning your cooking appliances, as grease, crumbs, and grime quickly build up and bake on to them.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/349614dd7779a80fded606c4efee36347a796242a29b697ec8581119f37e929a_1961.oct",
+								"isTimeSensitive": false,
+								"publisher": "Real Simple",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/15655308-20c2-47a8-a7ee-ce9690cf30f0.jpeg",
+								"received_rank": 19,
+								"recommended_at": 1765540215036,
+								"title": "The Easiest Ways to Degrease Your Toaster Oven, According to Cleaning Pros",
+								"topic": "home",
+								"url": "https://www.realsimple.com/how-to-degrease-a-toaster-oven-11860431?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "63bc338c-5eef-4ede-999f-fa84acc2c42c",
+								"scheduled_corpus_item_id": "9e8377e0-df9d-40ef-b67b-a198d84264c2",
+								"corpus_item_id": "63bc338c-5eef-4ede-999f-fa84acc2c42c",
+								"features": {
+									"t_society": 1
+								},
+								"excerpt": "Do you tend to take longer than other people to make a decision? Let’s find out. Does possessing a relatively high level of trait ambivalence sound like a bad thing?",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/4fb37c8498130ded14416660d5242cdc6ce3e66ab111b71f8b85667807c926ba_15086.ico",
+								"isTimeSensitive": false,
+								"publisher": "Inc. Magazine",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/e02e62ab-ba13-410d-8de7-cbe56fb06a19.jpeg",
+								"received_rank": 20,
+								"recommended_at": 1765540215036,
+								"title": "Why ‘Indecisive’ People Tend to Make Better Decisions, Backed by Cognitive Science",
+								"topic": "society",
+								"url": "https://www.inc.com/jeff-haden/why-indecisive-people-tend-to-make-better-decisions-backed-by-cognitive-science/91276144?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "c5524297-af12-4339-bb2c-164072af316a",
+								"scheduled_corpus_item_id": "26bf9da7-a114-496c-b670-bd9f9868953d",
+								"corpus_item_id": "c5524297-af12-4339-bb2c-164072af316a",
+								"features": {
+									"t_society": 1
+								},
+								"excerpt": "Books are inefficient, and the internet is training us to expect optimized experiences.",
+								"icon_src": null,
+								"isTimeSensitive": false,
+								"publisher": "The New Yorker",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/9e14fb94-8acd-4422-9216-ad366ce6f53a.jpeg",
+								"received_rank": 21,
+								"recommended_at": 1765540215036,
+								"title": "If You Quit Social Media, Will You Read More Books?",
+								"topic": "society",
+								"url": "https://www.newyorker.com/news/fault-lines/if-you-quit-social-media-will-you-read-more-books?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "3d024caf-47c2-4adb-b803-8a2c12a01325",
+								"scheduled_corpus_item_id": "35d07133-21d4-416f-8eb1-31802a247a51",
+								"corpus_item_id": "3d024caf-47c2-4adb-b803-8a2c12a01325",
+								"features": {
+									"t_travel": 1
+								},
+								"excerpt": "Around the world, trail designers are quietly employing surprising techniques to engineer awe. You’ve probably felt it without even knowing why. Inside the creative science that’s transforming your time outside. ",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/fb5dde2ae4901e1cc34985e778405a95b0c878bd2e55df1ed60d0e8c81b44863_638.svg",
+								"isTimeSensitive": false,
+								"publisher": "National Geographic",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/865d106d-ba31-4d1f-a7b9-763b4bb1a01d.jpeg",
+								"received_rank": 22,
+								"recommended_at": 1765540215036,
+								"title": "Secrets of the World’s Greatest Trailbuilders",
+								"topic": "travel",
+								"url": "https://www.nationalgeographic.com/adventure/article/trail-builders-perfect-hike?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "00a659cf-d6ca-4f60-8527-1abc0e25f98d",
+								"scheduled_corpus_item_id": "7c78d7af-5154-44fa-b297-4e436c94ee87",
+								"corpus_item_id": "00a659cf-d6ca-4f60-8527-1abc0e25f98d",
+								"features": {
+									"t_tech": 1
+								},
+								"excerpt": "A study of 8,000 children suggests social media, not screens in general, may be fuelling a rise in inattention.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/893396eaa6fda2f65ae0dc35f7d2b021e634ffff35978ce4240cdd7ff9eedb6a_257164.png",
+								"isTimeSensitive": false,
+								"publisher": "The Conversation",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/4cb751dd-c397-43ca-9319-d108c69092f6.jpeg",
+								"received_rank": 23,
+								"recommended_at": 1765540215036,
+								"title": "Social Media, Not Gaming, Tied to Rising Attention Problems in Teens, New Study Finds",
+								"topic": "tech",
+								"url": "https://theconversation.com/social-media-not-gaming-tied-to-rising-attention-problems-in-teens-new-study-finds-271144?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "965210d6-2587-4ffa-a74e-710d698f7856",
+								"scheduled_corpus_item_id": "132efb80-4bcf-4953-8d25-cbc0d3ec2ef9",
+								"corpus_item_id": "965210d6-2587-4ffa-a74e-710d698f7856",
+								"features": {
+									"t_arts": 1
+								},
+								"excerpt": "Juliet Sear, who created the three-tiered chocolate truffle fan cake, tells Vanity Fair what it was like to bake an over-the-top treat for the royal.",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/09541c65a1877af2e2adf9c104d22c3b4d0b9a136575e0b97c5ff9c1c1b903c1_15086.oct",
+								"isTimeSensitive": false,
+								"publisher": "Vanity Fair",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/4f72b81c-03b2-4ec4-9fee-3fbc3a88b7ea.png",
+								"received_rank": 24,
+								"recommended_at": 1765540215036,
+								"title": "Meet the Royal Baker Who Created a Towering Cake for Prince William",
+								"topic": "arts",
+								"url": "https://www.vanityfair.com/style/story/meet-the-royal-baker-who-created-a-towering-cake-for-prince-william?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "e88b350f-f703-4b47-ab19-eaae41c286cc",
+								"scheduled_corpus_item_id": "5b407c06-770b-45a5-9474-41955e6037fe",
+								"corpus_item_id": "e88b350f-f703-4b47-ab19-eaae41c286cc",
+								"features": {
+									"t_home": 1
+								},
+								"excerpt": "Florist and author Graeme Corbett of Bloom & Burn walks us through how he makes elegant table arrangements using seasonal local ingredients.",
+								"icon_src": null,
+								"isTimeSensitive": false,
+								"publisher": "House & Garden",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/995c444b-396e-4128-92f4-d768008e0969.jpeg",
+								"received_rank": 25,
+								"recommended_at": 1765540215036,
+								"title": "A Florist’s Guide to Simple, Elegant Table Arrangements for Christmas",
+								"topic": "home",
+								"url": "https://www.houseandgarden.co.uk/article/floral-table-arrangements-christmas-ideas?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							},
+							{
+								"id": "6292e1d5-1d23-40d5-bd72-2b23cf07f1ef",
+								"scheduled_corpus_item_id": "842424f9-293b-41f1-a624-61b5c2262270",
+								"corpus_item_id": "6292e1d5-1d23-40d5-bd72-2b23cf07f1ef",
+								"features": {
+									"t_health": 1
+								},
+								"excerpt": "People swear it heals inflammation, boosts mood, builds discipline, maybe even slows aging. But is any of this real? Or are we just looking for something else to flex online?",
+								"icon_src": "https://prod-images.merino.prod.webservices.mozgcp.net/favicons/59a371c0af22cd7ed0fdbe74a979cd0f726ff3d24b596b9883ebdc06a95dc47c_2544.webp",
+								"isTimeSensitive": false,
+								"publisher": "VICE",
+								"raw_image_src": "https://s3.us-east-1.amazonaws.com/pocket-curatedcorpusapi-prod-images/0c6a57a4-80a6-49fd-b784-9e523292169f.jpeg",
+								"received_rank": 26,
+								"recommended_at": 1765540215036,
+								"title": "How to Cold Plunge Like a Wellness Psycho (and What It Actually Does to You)",
+								"topic": "health",
+								"url": "https://www.vice.com/en/article/how-to-cold-plunge/?utm_source=firefox-newtab-en-gb",
+								"score": 1
+							}
+						],
+						"surfaceId": "NEW_TAB_EN_GB",
+						"status": "success"
+					}
+				}
+			},
+			"loaded": true
+		},
+		"impressions": {
+			"feed": {}
+		},
+		"blocks": {},
+		"spocs": {
+			"spocs_endpoint": "https://spocs.getpocket.com/spocs",
+			"lastUpdated": 1765540214971,
+			"cacheUpdateTime": 1800000,
+			"onDemand": {
+				"enabled": false,
+				"loaded": false
+			},
+			"data": {
+				"newtab_stories_1": [
+					{
+						"format": "spoc",
+						"url": "https://mozillafoundation.org/?form=eoy-nta25-c1",
+						"callbacks": {
+							"click": "https://ads.mozilla.org/v1/t?data=CvEHEgg0MTQwMTcwMRoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqEk1vemlsbGEgRm91bmRhdGlvbjIkYzA3NGFlMWItODk2ZS00Y2ZmLWE2MjctNWY4NjI1ODVmZjZmOgJHQnIQbmV3dGFiX3N0b3JpZXNfMXoDRU5HggFOTW96aWxsYS81LjAgKFgxMTsgVWJ1bnR1OyBMaW51eCB4ODZfNjQ7IHJ2OjE0Ni4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0Ni4wmAECoAEBqAECsAEDuAEEwgEkMmM5MjA4OWMtYzY0Yi00YTI4LWEyYzAtZGQ5NGM1YWE3NGIw-gEIMTI5Mzc5MDHiAeAFCocFaHR0cHM6Ly9ldXcyLnNtYXJ0YWRzZXJ2ZXIuY29tL2gvY3A_aW1naWQ9NDE0MDE3MDEmaW5zaWQ9MTI5Mzc5MDEmcGdpZD0yMTA0MTY4JmZtdGlkPTE0NDAyMCZja2lkPTAmdWlpPTI3MjU4MzgzMzkwNjYwMzEyNTkmYWNkPTE3NjU1NDAyMTQ5MDQmdG1zdHA9NTI2OTQwNTA1MiZ0Z3Q9Y291bnRyeSUzZEdCJTNicmVnaW9uJTNkRU5HJTNiJTI0ZHQlM2QxdCZzeXN0Z3Q9JTI0cWMlM2QxMzE0MTA1OTgzJTNiJTI0cWwlM2RIaWdoJTNiJTI0cXBjJTNkZTE2JTNiJTI0cXBjJTNkZTEqJTNiJTI0cXBjJTNkZTE2KiUzYiUyNHF0JTNkNzhfMjUzMV8xNzI2ODB0JTNiJTI0ZG1hJTNkMCUzYiUyNHFvJTNkNSUzYiUyNGIlM2QxMjk5OSUzYiUyNG8lM2Q5OTk5OSZlbnZ0eXBlPTAmaW1wdHlwZT0wJmdkcHI9MSZzY3JpcHRpZD0xMDAwOTcmb3BpZD1iZmVjNGJhZS00NTNmLTQ0MWMtYjBiNC1kMDQyNTVmNGM1Njkmb3BkdD0xNzY1NTQwMjE0OTAzJmJsZHY9MTQzNjMmc3JjZm49ZGlmZiZyZXFpZD0xMGQ1ZmVlOC1iMmQxLTRiZGEtYmVmMy1lMGRkNDExMGFhMTMmcmVxZHQ9MTc2NTU0MDIxNDkwNCZvcHBpZD1iZmVjNGJhZS00NTNmLTQ0MWMtYjBiNC1kMDQyNTVmNGM1NjkmZXFzPWExNjFiNWFjNDNkYTY1YjMyN2EzMzAxY2YzMGYzYzIzMGUyNjQ2NDcSRk1vemlsbGEvNS4wIChYMTE7IExpbnV4IHg4Nl82NDsgcnY6MTQ1LjApIEdlY2tvLzIwMTAwMTAxIEZpcmVmb3gvMTQ1LjAaDDE2MS43Ni4yMzYuMBIg3iNG-IWxFof-nmN32IrcqBuDZLdSb2yh77P9zm4sCVo",
+							"impression": "https://ads.mozilla.org/v1/t?data=CogIEgg0MTQwMTcwMRoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqEk1vemlsbGEgRm91bmRhdGlvbjIkYzA3NGFlMWItODk2ZS00Y2ZmLWE2MjctNWY4NjI1ODVmZjZmOgJHQnIQbmV3dGFiX3N0b3JpZXNfMXoDRU5HggFOTW96aWxsYS81LjAgKFgxMTsgVWJ1bnR1OyBMaW51eCB4ODZfNjQ7IHJ2OjE0Ni4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0Ni4wmAEBoAEBqAECsAEDuAEEwgEkMmM5MjA4OWMtYzY0Yi00YTI4LWEyYzAtZGQ5NGM1YWE3NGIw-gEIMTI5Mzc5MDHiAfcFCp4FaHR0cHM6Ly9ldXcyLnNtYXJ0YWRzZXJ2ZXIuY29tL2gvYWlwP3VpaT0yNzI1ODM4MzM5MDY2MDMxMjU5JnRtc3RwPTUyNjk0MDUwNTImY2tpZD0wJnN5c3RndD0lMjRxYyUzZDEzMTQxMDU5ODMlM2IlMjRxbCUzZEhpZ2glM2IlMjRxcGMlM2RlMTYlM2IlMjRxcGMlM2RlMSolM2IlMjRxcGMlM2RlMTYqJTNiJTI0cXQlM2Q3OF8yNTMxXzE3MjY4MHQlM2IlMjRkbWElM2QwJTNiJTI0cW8lM2Q1JTNiJTI0YiUzZDEyOTk5JTNiJTI0byUzZDk5OTk5JmFjZD0xNzY1NTQwMjE0OTA0JmVudnR5cGU9MCZzaXRlaWQ9NzIzNTE5JnRndD1jb3VudHJ5JTNkR0IlM2JyZWdpb24lM2RFTkclM2IlMjRkdCUzZDF0JmdkcHI9MSZvcGlkPWJmZWM0YmFlLTQ1M2YtNDQxYy1iMGI0LWQwNDI1NWY0YzU2OSZvcGR0PTE3NjU1NDAyMTQ5MDMmYmxkdj0xNDM2MyZzcmNmbj1kaWZmJnJlcWlkPTEwZDVmZWU4LWIyZDEtNGJkYS1iZWYzLWUwZGQ0MTEwYWExMyZyZXFkdD0xNzY1NTQwMjE0OTA0Jm9wcGlkPWJmZWM0YmFlLTQ1M2YtNDQxYy1iMGI0LWQwNDI1NWY0YzU2OSZ2aXNpdD1WJnN0YXRpZD01JmltcHR5cGU9MCZpbnRndHlwZT0wJmNhcHA9MCZtY3JkYnQ9MSZpbnNpZD0xMjkzNzkwMSZpbWdpZD00MTQwMTcwMSZwZ2lkPTIxMDQxNjgmZm10aWQ9MTQ0MDIwJmlzTGF6eT0wJnNjcmlwdGlkPTEwMDA5NxJGTW96aWxsYS81LjAgKFgxMTsgTGludXggeDg2XzY0OyBydjoxNDUuMCkgR2Vja28vMjAxMDAxMDEgRmlyZWZveC8xNDUuMBoMMTYxLjc2LjIzNi4wEiBqSyMRJkGGa9hLeUr9fsUgAe695_PC0sRAbvltMOZP8g",
+							"report": "https://ads.mozilla.org/v1/t?data=CukEEgg0MTQwMTcwMRoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqEk1vemlsbGEgRm91bmRhdGlvbjIkYzA3NGFlMWItODk2ZS00Y2ZmLWE2MjctNWY4NjI1ODVmZjZmOgJHQnIQbmV3dGFiX3N0b3JpZXNfMXoDRU5HggFOTW96aWxsYS81LjAgKFgxMTsgVWJ1bnR1OyBMaW51eCB4ODZfNjQ7IHJ2OjE0Ni4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0Ni4wmAEEoAEBqAECsAEDuAEEwgEkMmM5MjA4OWMtYzY0Yi00YTI4LWEyYzAtZGQ5NGM1YWE3NGIw6gEwaHR0cHM6Ly9tb3ppbGxhZm91bmRhdGlvbi5vcmcvP2Zvcm09ZW95LW50YTI1LWMx8gHMAWh0dHBzOi8vY3JlYXRpdmVzLnNhc2Nkbi5jb20vZGlmZi81NDE0L2FkdmVydGlzZXIvNTM1ODE2L01vemlsbGFfSGFzX1JlYWNoZWRfODVfX09mX091cl8yMDI1X0Z1bmRyYWlzaW5nX0dvYWwuX0RvbmF0ZV9Ob3dfRm9yX0FfQmV0dGVyX1RlY2hfRnV0dXJlLl9fX19fUGhvdG9ncmFwaHlfMWZjMWJiYTAtZDMzZC00ZmNhLThiNzMtZjA3YWViNDYxNzhiLmpwZ_oBCDEyOTM3OTAxggJWTW96aWxsYSBIYXMgUmVhY2hlZCA4NSUgT2YgT3VyIDIwMjUgRnVuZHJhaXNpbmcgR29hbC4gRG9uYXRlIEZvciBBIEJldHRlciBUZWNoIEZ1dHVyZS4SIFbbAD7mMerMAiBA8Y3h3Uc9wnqsutJVJpHNycxykknH"
+						},
+						"image_url": "https://ads-img.mozilla.org/v1/images?image_data=Cs8BCswBaHR0cHM6Ly9jcmVhdGl2ZXMuc2FzY2RuLmNvbS9kaWZmLzU0MTQvYWR2ZXJ0aXNlci81MzU4MTYvTW96aWxsYV9IYXNfUmVhY2hlZF84NV9fT2ZfT3VyXzIwMjVfRnVuZHJhaXNpbmdfR29hbC5fRG9uYXRlX05vd19Gb3JfQV9CZXR0ZXJfVGVjaF9GdXR1cmUuX19fX19QaG90b2dyYXBoeV8xZmMxYmJhMC1kMzNkLTRmY2EtOGI3My1mMDdhZWI0NjE3OGIuanBnEiCM_BDWKJZ_VMghRGmo2ORa9w-a7qmYsB_cvYi1Z6ssxw",
+						"title": "Mozilla Has Reached 85% Of Our 2025 Fundraising Goal. Donate For A Better Tech Future.",
+						"domain": "",
+						"excerpt": "",
+						"sponsor": "Mozilla Foundation",
+						"block_key": "CAISEm1vemlsbGEgZm91bmRhdGlvbg",
+						"caps": {
+							"cap_key": "12937901",
+							"day": 10
+						},
+						"ranking": {
+							"priority": 74,
+							"personalization_models": null,
+							"item_score": 1
+						}
+					}
+				],
+				"newtab_stories_2": [
+					{
+						"format": "spoc",
+						"url": "https://hellofresh-uk.648q.net/c/2396016/3443490/7901",
+						"callbacks": {
+							"click": "https://ads.mozilla.org/v1/t?data=CukHEgg0MTQxNTQyMxoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqCkhlbGxvRnJlc2gyJGMwNzRhZTFiLTg5NmUtNGNmZi1hNjI3LTVmODYyNTg1ZmY2ZjoCR0JyEG5ld3RhYl9zdG9yaWVzXzJ6A0VOR4IBTk1vemlsbGEvNS4wIChYMTE7IFVidW50dTsgTGludXggeDg2XzY0OyBydjoxNDYuMCkgR2Vja28vMjAxMDAxMDEgRmlyZWZveC8xNDYuMJgBAqABAagBArABA7gBBMIBJDJjOTIwODljLWM2NGItNGEyOC1hMmMwLWRkOTRjNWFhNzRiMPoBCDEzMDI5OTk24gHgBQqHBWh0dHBzOi8vZXV3Mi5zbWFydGFkc2VydmVyLmNvbS9oL2NwP2ltZ2lkPTQxNDE1NDIzJmluc2lkPTEzMDI5OTk2JnBnaWQ9MjEwNDE2OCZmbXRpZD0xNDQwMjAmY2tpZD0wJnVpaT04MjY5MDgzNzM4NTU0NzU4NTc2JmFjZD0xNzY1NTQwMjE0OTA0JnRtc3RwPTUyNjk0MDUwNTImdGd0PWNvdW50cnklM2RHQiUzYnJlZ2lvbiUzZEVORyUzYiUyNGR0JTNkMXQmc3lzdGd0PSUyNHFjJTNkMTMxNDEwNTk4MyUzYiUyNHFsJTNkSGlnaCUzYiUyNHFwYyUzZGUxNiUzYiUyNHFwYyUzZGUxKiUzYiUyNHFwYyUzZGUxNiolM2IlMjRxdCUzZDc4XzI1MzFfMTcyNjgwdCUzYiUyNGRtYSUzZDAlM2IlMjRxbyUzZDUlM2IlMjRiJTNkMTI5OTklM2IlMjRvJTNkOTk5OTkmZW52dHlwZT0wJmltcHR5cGU9MCZnZHByPTEmc2NyaXB0aWQ9MTAwMDk3Jm9waWQ9ZTJjNTIwZDktM2U5YS00ZDNkLWI2NzAtMTFhNWMyZjE0MTAwJm9wZHQ9MTc2NTU0MDIxNDkwMyZibGR2PTE0MzYzJnNyY2ZuPWRpZmYmcmVxaWQ9MTBkNWZlZTgtYjJkMS00YmRhLWJlZjMtZTBkZDQxMTBhYTEzJnJlcWR0PTE3NjU1NDAyMTQ5MDQmb3BwaWQ9ZTJjNTIwZDktM2U5YS00ZDNkLWI2NzAtMTFhNWMyZjE0MTAwJmVxcz01NjBjNmFiNDU3MjFkNGIyMjZmZTUyNzgyNjc4MjFlYzBmZDQ3Mjk5EkZNb3ppbGxhLzUuMCAoWDExOyBMaW51eCB4ODZfNjQ7IHJ2OjE0NS4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0NS4wGgwxNjEuNzYuMjM2LjASILpUtFdIqwCJbdQniJNS3PATV-FoRdMnYBjpTOLIc4GX",
+							"impression": "https://ads.mozilla.org/v1/t?data=CoAIEgg0MTQxNTQyMxoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqCkhlbGxvRnJlc2gyJGMwNzRhZTFiLTg5NmUtNGNmZi1hNjI3LTVmODYyNTg1ZmY2ZjoCR0JyEG5ld3RhYl9zdG9yaWVzXzJ6A0VOR4IBTk1vemlsbGEvNS4wIChYMTE7IFVidW50dTsgTGludXggeDg2XzY0OyBydjoxNDYuMCkgR2Vja28vMjAxMDAxMDEgRmlyZWZveC8xNDYuMJgBAaABAagBArABA7gBBMIBJDJjOTIwODljLWM2NGItNGEyOC1hMmMwLWRkOTRjNWFhNzRiMPoBCDEzMDI5OTk24gH3BQqeBWh0dHBzOi8vZXV3Mi5zbWFydGFkc2VydmVyLmNvbS9oL2FpcD91aWk9ODI2OTA4MzczODU1NDc1ODU3NiZ0bXN0cD01MjY5NDA1MDUyJmNraWQ9MCZzeXN0Z3Q9JTI0cWMlM2QxMzE0MTA1OTgzJTNiJTI0cWwlM2RIaWdoJTNiJTI0cXBjJTNkZTE2JTNiJTI0cXBjJTNkZTEqJTNiJTI0cXBjJTNkZTE2KiUzYiUyNHF0JTNkNzhfMjUzMV8xNzI2ODB0JTNiJTI0ZG1hJTNkMCUzYiUyNHFvJTNkNSUzYiUyNGIlM2QxMjk5OSUzYiUyNG8lM2Q5OTk5OSZhY2Q9MTc2NTU0MDIxNDkwNCZlbnZ0eXBlPTAmc2l0ZWlkPTcyMzUxOSZ0Z3Q9Y291bnRyeSUzZEdCJTNicmVnaW9uJTNkRU5HJTNiJTI0ZHQlM2QxdCZnZHByPTEmb3BpZD1lMmM1MjBkOS0zZTlhLTRkM2QtYjY3MC0xMWE1YzJmMTQxMDAmb3BkdD0xNzY1NTQwMjE0OTAzJmJsZHY9MTQzNjMmc3JjZm49ZGlmZiZyZXFpZD0xMGQ1ZmVlOC1iMmQxLTRiZGEtYmVmMy1lMGRkNDExMGFhMTMmcmVxZHQ9MTc2NTU0MDIxNDkwNCZvcHBpZD1lMmM1MjBkOS0zZTlhLTRkM2QtYjY3MC0xMWE1YzJmMTQxMDAmdmlzaXQ9ViZzdGF0aWQ9NSZpbXB0eXBlPTAmaW50Z3R5cGU9MCZjYXBwPTAmbWNyZGJ0PTEmaW5zaWQ9MTMwMjk5OTYmaW1naWQ9NDE0MTU0MjMmcGdpZD0yMTA0MTY4JmZtdGlkPTE0NDAyMCZpc0xhenk9MCZzY3JpcHRpZD0xMDAwOTcSRk1vemlsbGEvNS4wIChYMTE7IExpbnV4IHg4Nl82NDsgcnY6MTQ1LjApIEdlY2tvLzIwMTAwMTAxIEZpcmVmb3gvMTQ1LjAaDDE2MS43Ni4yMzYuMBIge8O_mC2rRh1eOwttx9C43H-LW509Qcux7yYf-n1qgwU",
+							"report": "https://ads.mozilla.org/v1/t?data=CvAEEgg0MTQxNTQyMxoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqCkhlbGxvRnJlc2gyJGMwNzRhZTFiLTg5NmUtNGNmZi1hNjI3LTVmODYyNTg1ZmY2ZjoCR0JyEG5ld3RhYl9zdG9yaWVzXzJ6A0VOR4IBTk1vemlsbGEvNS4wIChYMTE7IFVidW50dTsgTGludXggeDg2XzY0OyBydjoxNDYuMCkgR2Vja28vMjAxMDAxMDEgRmlyZWZveC8xNDYuMJgBBKABAagBArABA7gBBMIBJDJjOTIwODljLWM2NGItNGEyOC1hMmMwLWRkOTRjNWFhNzRiMOoBNWh0dHBzOi8vaGVsbG9mcmVzaC11ay42NDhxLm5ldC9jLzIzOTYwMTYvMzQ0MzQ5MC83OTAx8gHaAWh0dHBzOi8vY3JlYXRpdmVzLnNhc2Nkbi5jb20vZGlmZi81NDE0L2FkdmVydGlzZXIvNTM2Mjk5L0hlbGxvRnJlc2hfc19EZWxpY2lvdXNfT2ZmZXJfX0dldF81MF9fb2ZmX1lvdXJfRmlyc3RfQm94XytfRnJlZV9EZXNzZXJ0X2Zvcl9MaWZlX19fX19RdWlja19DcmVhbXlfUHJhd25fYW5kX1BlYV9SaWdhdG9uaV9jNGJkZmQ1Yy00OGVmLTQwMzktYjY2My05NzVmZmQ0MGViMzcuanBn-gEIMTMwMjk5OTaCAlJIZWxsb0ZyZXNo4oCZcyBEZWxpY2lvdXMgT2ZmZXI6IEdldCA1MCUgb2ZmIFlvdXIgRmlyc3QgQm94ICsgRnJlZSBEZXNzZXJ0IGZvciBMaWZlEiDc8INQCZbCYPvKdVw2ouLsyCIu-pBhbKfC47xH1QNzNQ"
+						},
+						"image_url": "https://ads-img.mozilla.org/v1/images?image_data=Ct0BCtoBaHR0cHM6Ly9jcmVhdGl2ZXMuc2FzY2RuLmNvbS9kaWZmLzU0MTQvYWR2ZXJ0aXNlci81MzYyOTkvSGVsbG9GcmVzaF9zX0RlbGljaW91c19PZmZlcl9fR2V0XzUwX19vZmZfWW91cl9GaXJzdF9Cb3hfK19GcmVlX0Rlc3NlcnRfZm9yX0xpZmVfX19fX1F1aWNrX0NyZWFteV9QcmF3bl9hbmRfUGVhX1JpZ2F0b25pX2M0YmRmZDVjLTQ4ZWYtNDAzOS1iNjYzLTk3NWZmZDQwZWIzNy5qcGcSIDXmE79Vyd-tZ_3g12XjTd6bbS-mlRK1frnTsRLNXF-m",
+						"title": "HelloFresh’s Delicious Offer: Get 50% off Your First Box + Free Dessert for Life",
+						"domain": "",
+						"excerpt": "",
+						"sponsor": "HelloFresh",
+						"block_key": "CAISCmhlbGxvZnJlc2g",
+						"caps": {
+							"cap_key": "13029996",
+							"day": 10
+						},
+						"ranking": {
+							"priority": 72,
+							"personalization_models": null,
+							"item_score": 1
+						}
+					}
+				],
+				"newtab_stories_3": [],
+				"newtab_stories_4": [],
+				"newtab_stories_5": [],
+				"newtab_stories_6": [],
+				"newtab_spocs": {
+					"personalized": true,
+					"items": [
+						{
+							"format": "spoc",
+							"id": "13029996",
+							"flight_id": "CAISCmhlbGxvZnJlc2g",
+							"block_key": "CAISCmhlbGxvZnJlc2g",
+							"shim": {
+								"click": "https://ads.mozilla.org/v1/t?data=CukHEgg0MTQxNTQyMxoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqCkhlbGxvRnJlc2gyJGMwNzRhZTFiLTg5NmUtNGNmZi1hNjI3LTVmODYyNTg1ZmY2ZjoCR0JyEG5ld3RhYl9zdG9yaWVzXzJ6A0VOR4IBTk1vemlsbGEvNS4wIChYMTE7IFVidW50dTsgTGludXggeDg2XzY0OyBydjoxNDYuMCkgR2Vja28vMjAxMDAxMDEgRmlyZWZveC8xNDYuMJgBAqABAagBArABA7gBBMIBJDJjOTIwODljLWM2NGItNGEyOC1hMmMwLWRkOTRjNWFhNzRiMPoBCDEzMDI5OTk24gHgBQqHBWh0dHBzOi8vZXV3Mi5zbWFydGFkc2VydmVyLmNvbS9oL2NwP2ltZ2lkPTQxNDE1NDIzJmluc2lkPTEzMDI5OTk2JnBnaWQ9MjEwNDE2OCZmbXRpZD0xNDQwMjAmY2tpZD0wJnVpaT04MjY5MDgzNzM4NTU0NzU4NTc2JmFjZD0xNzY1NTQwMjE0OTA0JnRtc3RwPTUyNjk0MDUwNTImdGd0PWNvdW50cnklM2RHQiUzYnJlZ2lvbiUzZEVORyUzYiUyNGR0JTNkMXQmc3lzdGd0PSUyNHFjJTNkMTMxNDEwNTk4MyUzYiUyNHFsJTNkSGlnaCUzYiUyNHFwYyUzZGUxNiUzYiUyNHFwYyUzZGUxKiUzYiUyNHFwYyUzZGUxNiolM2IlMjRxdCUzZDc4XzI1MzFfMTcyNjgwdCUzYiUyNGRtYSUzZDAlM2IlMjRxbyUzZDUlM2IlMjRiJTNkMTI5OTklM2IlMjRvJTNkOTk5OTkmZW52dHlwZT0wJmltcHR5cGU9MCZnZHByPTEmc2NyaXB0aWQ9MTAwMDk3Jm9waWQ9ZTJjNTIwZDktM2U5YS00ZDNkLWI2NzAtMTFhNWMyZjE0MTAwJm9wZHQ9MTc2NTU0MDIxNDkwMyZibGR2PTE0MzYzJnNyY2ZuPWRpZmYmcmVxaWQ9MTBkNWZlZTgtYjJkMS00YmRhLWJlZjMtZTBkZDQxMTBhYTEzJnJlcWR0PTE3NjU1NDAyMTQ5MDQmb3BwaWQ9ZTJjNTIwZDktM2U5YS00ZDNkLWI2NzAtMTFhNWMyZjE0MTAwJmVxcz01NjBjNmFiNDU3MjFkNGIyMjZmZTUyNzgyNjc4MjFlYzBmZDQ3Mjk5EkZNb3ppbGxhLzUuMCAoWDExOyBMaW51eCB4ODZfNjQ7IHJ2OjE0NS4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0NS4wGgwxNjEuNzYuMjM2LjASILpUtFdIqwCJbdQniJNS3PATV-FoRdMnYBjpTOLIc4GX",
+								"impression": "https://ads.mozilla.org/v1/t?data=CoAIEgg0MTQxNTQyMxoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqCkhlbGxvRnJlc2gyJGMwNzRhZTFiLTg5NmUtNGNmZi1hNjI3LTVmODYyNTg1ZmY2ZjoCR0JyEG5ld3RhYl9zdG9yaWVzXzJ6A0VOR4IBTk1vemlsbGEvNS4wIChYMTE7IFVidW50dTsgTGludXggeDg2XzY0OyBydjoxNDYuMCkgR2Vja28vMjAxMDAxMDEgRmlyZWZveC8xNDYuMJgBAaABAagBArABA7gBBMIBJDJjOTIwODljLWM2NGItNGEyOC1hMmMwLWRkOTRjNWFhNzRiMPoBCDEzMDI5OTk24gH3BQqeBWh0dHBzOi8vZXV3Mi5zbWFydGFkc2VydmVyLmNvbS9oL2FpcD91aWk9ODI2OTA4MzczODU1NDc1ODU3NiZ0bXN0cD01MjY5NDA1MDUyJmNraWQ9MCZzeXN0Z3Q9JTI0cWMlM2QxMzE0MTA1OTgzJTNiJTI0cWwlM2RIaWdoJTNiJTI0cXBjJTNkZTE2JTNiJTI0cXBjJTNkZTEqJTNiJTI0cXBjJTNkZTE2KiUzYiUyNHF0JTNkNzhfMjUzMV8xNzI2ODB0JTNiJTI0ZG1hJTNkMCUzYiUyNHFvJTNkNSUzYiUyNGIlM2QxMjk5OSUzYiUyNG8lM2Q5OTk5OSZhY2Q9MTc2NTU0MDIxNDkwNCZlbnZ0eXBlPTAmc2l0ZWlkPTcyMzUxOSZ0Z3Q9Y291bnRyeSUzZEdCJTNicmVnaW9uJTNkRU5HJTNiJTI0ZHQlM2QxdCZnZHByPTEmb3BpZD1lMmM1MjBkOS0zZTlhLTRkM2QtYjY3MC0xMWE1YzJmMTQxMDAmb3BkdD0xNzY1NTQwMjE0OTAzJmJsZHY9MTQzNjMmc3JjZm49ZGlmZiZyZXFpZD0xMGQ1ZmVlOC1iMmQxLTRiZGEtYmVmMy1lMGRkNDExMGFhMTMmcmVxZHQ9MTc2NTU0MDIxNDkwNCZvcHBpZD1lMmM1MjBkOS0zZTlhLTRkM2QtYjY3MC0xMWE1YzJmMTQxMDAmdmlzaXQ9ViZzdGF0aWQ9NSZpbXB0eXBlPTAmaW50Z3R5cGU9MCZjYXBwPTAmbWNyZGJ0PTEmaW5zaWQ9MTMwMjk5OTYmaW1naWQ9NDE0MTU0MjMmcGdpZD0yMTA0MTY4JmZtdGlkPTE0NDAyMCZpc0xhenk9MCZzY3JpcHRpZD0xMDAwOTcSRk1vemlsbGEvNS4wIChYMTE7IExpbnV4IHg4Nl82NDsgcnY6MTQ1LjApIEdlY2tvLzIwMTAwMTAxIEZpcmVmb3gvMTQ1LjAaDDE2MS43Ni4yMzYuMBIge8O_mC2rRh1eOwttx9C43H-LW509Qcux7yYf-n1qgwU",
+								"report": "https://ads.mozilla.org/v1/t?data=CvAEEgg0MTQxNTQyMxoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqCkhlbGxvRnJlc2gyJGMwNzRhZTFiLTg5NmUtNGNmZi1hNjI3LTVmODYyNTg1ZmY2ZjoCR0JyEG5ld3RhYl9zdG9yaWVzXzJ6A0VOR4IBTk1vemlsbGEvNS4wIChYMTE7IFVidW50dTsgTGludXggeDg2XzY0OyBydjoxNDYuMCkgR2Vja28vMjAxMDAxMDEgRmlyZWZveC8xNDYuMJgBBKABAagBArABA7gBBMIBJDJjOTIwODljLWM2NGItNGEyOC1hMmMwLWRkOTRjNWFhNzRiMOoBNWh0dHBzOi8vaGVsbG9mcmVzaC11ay42NDhxLm5ldC9jLzIzOTYwMTYvMzQ0MzQ5MC83OTAx8gHaAWh0dHBzOi8vY3JlYXRpdmVzLnNhc2Nkbi5jb20vZGlmZi81NDE0L2FkdmVydGlzZXIvNTM2Mjk5L0hlbGxvRnJlc2hfc19EZWxpY2lvdXNfT2ZmZXJfX0dldF81MF9fb2ZmX1lvdXJfRmlyc3RfQm94XytfRnJlZV9EZXNzZXJ0X2Zvcl9MaWZlX19fX19RdWlja19DcmVhbXlfUHJhd25fYW5kX1BlYV9SaWdhdG9uaV9jNGJkZmQ1Yy00OGVmLTQwMzktYjY2My05NzVmZmQ0MGViMzcuanBn-gEIMTMwMjk5OTaCAlJIZWxsb0ZyZXNo4oCZcyBEZWxpY2lvdXMgT2ZmZXI6IEdldCA1MCUgb2ZmIFlvdXIgRmlyc3QgQm94ICsgRnJlZSBEZXNzZXJ0IGZvciBMaWZlEiDc8INQCZbCYPvKdVw2ouLsyCIu-pBhbKfC47xH1QNzNQ"
+							},
+							"caps": {
+								"flight": {
+									"count": 10,
+									"period": 86400
+								}
+							},
+							"domain": "",
+							"excerpt": "",
+							"raw_image_src": "https://ads-img.mozilla.org/v1/images?image_data=Ct0BCtoBaHR0cHM6Ly9jcmVhdGl2ZXMuc2FzY2RuLmNvbS9kaWZmLzU0MTQvYWR2ZXJ0aXNlci81MzYyOTkvSGVsbG9GcmVzaF9zX0RlbGljaW91c19PZmZlcl9fR2V0XzUwX19vZmZfWW91cl9GaXJzdF9Cb3hfK19GcmVlX0Rlc3NlcnRfZm9yX0xpZmVfX19fX1F1aWNrX0NyZWFteV9QcmF3bl9hbmRfUGVhX1JpZ2F0b25pX2M0YmRmZDVjLTQ4ZWYtNDAzOS1iNjYzLTk3NWZmZDQwZWIzNy5qcGcSIDXmE79Vyd-tZ_3g12XjTd6bbS-mlRK1frnTsRLNXF-m",
+							"priority": 72,
+							"personalization_models": null,
+							"item_score": 1,
+							"sponsor": "HelloFresh",
+							"title": "HelloFresh’s Delicious Offer: Get 50% off Your First Box + Free Dessert for Life",
+							"url": "https://hellofresh-uk.648q.net/c/2396016/3443490/7901",
+							"fetchTimestamp": 1765540214971,
+							"score": -0.00001,
+							"scorableItem": {
+								"id": "13029996",
+								"item_tags": {
+									"food_and_drink": 1
+								},
+								"item_score": 1,
+								"item_sort_id": 1
+							},
+							"rankingVector": {
+								"final_features": {
+									"tag_sim": 0,
+									"item_sort_id": 1
+								},
+								"coeffs": {
+									"tag_sim": 1,
+									"item_sort_id": -0.00001
+								},
+								"score": -0.00001
+							}
+						},
+						{
+							"format": "spoc",
+							"id": "12937901",
+							"flight_id": "CAISEm1vemlsbGEgZm91bmRhdGlvbg",
+							"block_key": "CAISEm1vemlsbGEgZm91bmRhdGlvbg",
+							"shim": {
+								"click": "https://ads.mozilla.org/v1/t?data=CvEHEgg0MTQwMTcwMRoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqEk1vemlsbGEgRm91bmRhdGlvbjIkYzA3NGFlMWItODk2ZS00Y2ZmLWE2MjctNWY4NjI1ODVmZjZmOgJHQnIQbmV3dGFiX3N0b3JpZXNfMXoDRU5HggFOTW96aWxsYS81LjAgKFgxMTsgVWJ1bnR1OyBMaW51eCB4ODZfNjQ7IHJ2OjE0Ni4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0Ni4wmAECoAEBqAECsAEDuAEEwgEkMmM5MjA4OWMtYzY0Yi00YTI4LWEyYzAtZGQ5NGM1YWE3NGIw-gEIMTI5Mzc5MDHiAeAFCocFaHR0cHM6Ly9ldXcyLnNtYXJ0YWRzZXJ2ZXIuY29tL2gvY3A_aW1naWQ9NDE0MDE3MDEmaW5zaWQ9MTI5Mzc5MDEmcGdpZD0yMTA0MTY4JmZtdGlkPTE0NDAyMCZja2lkPTAmdWlpPTI3MjU4MzgzMzkwNjYwMzEyNTkmYWNkPTE3NjU1NDAyMTQ5MDQmdG1zdHA9NTI2OTQwNTA1MiZ0Z3Q9Y291bnRyeSUzZEdCJTNicmVnaW9uJTNkRU5HJTNiJTI0ZHQlM2QxdCZzeXN0Z3Q9JTI0cWMlM2QxMzE0MTA1OTgzJTNiJTI0cWwlM2RIaWdoJTNiJTI0cXBjJTNkZTE2JTNiJTI0cXBjJTNkZTEqJTNiJTI0cXBjJTNkZTE2KiUzYiUyNHF0JTNkNzhfMjUzMV8xNzI2ODB0JTNiJTI0ZG1hJTNkMCUzYiUyNHFvJTNkNSUzYiUyNGIlM2QxMjk5OSUzYiUyNG8lM2Q5OTk5OSZlbnZ0eXBlPTAmaW1wdHlwZT0wJmdkcHI9MSZzY3JpcHRpZD0xMDAwOTcmb3BpZD1iZmVjNGJhZS00NTNmLTQ0MWMtYjBiNC1kMDQyNTVmNGM1Njkmb3BkdD0xNzY1NTQwMjE0OTAzJmJsZHY9MTQzNjMmc3JjZm49ZGlmZiZyZXFpZD0xMGQ1ZmVlOC1iMmQxLTRiZGEtYmVmMy1lMGRkNDExMGFhMTMmcmVxZHQ9MTc2NTU0MDIxNDkwNCZvcHBpZD1iZmVjNGJhZS00NTNmLTQ0MWMtYjBiNC1kMDQyNTVmNGM1NjkmZXFzPWExNjFiNWFjNDNkYTY1YjMyN2EzMzAxY2YzMGYzYzIzMGUyNjQ2NDcSRk1vemlsbGEvNS4wIChYMTE7IExpbnV4IHg4Nl82NDsgcnY6MTQ1LjApIEdlY2tvLzIwMTAwMTAxIEZpcmVmb3gvMTQ1LjAaDDE2MS43Ni4yMzYuMBIg3iNG-IWxFof-nmN32IrcqBuDZLdSb2yh77P9zm4sCVo",
+								"impression": "https://ads.mozilla.org/v1/t?data=CogIEgg0MTQwMTcwMRoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqEk1vemlsbGEgRm91bmRhdGlvbjIkYzA3NGFlMWItODk2ZS00Y2ZmLWE2MjctNWY4NjI1ODVmZjZmOgJHQnIQbmV3dGFiX3N0b3JpZXNfMXoDRU5HggFOTW96aWxsYS81LjAgKFgxMTsgVWJ1bnR1OyBMaW51eCB4ODZfNjQ7IHJ2OjE0Ni4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0Ni4wmAEBoAEBqAECsAEDuAEEwgEkMmM5MjA4OWMtYzY0Yi00YTI4LWEyYzAtZGQ5NGM1YWE3NGIw-gEIMTI5Mzc5MDHiAfcFCp4FaHR0cHM6Ly9ldXcyLnNtYXJ0YWRzZXJ2ZXIuY29tL2gvYWlwP3VpaT0yNzI1ODM4MzM5MDY2MDMxMjU5JnRtc3RwPTUyNjk0MDUwNTImY2tpZD0wJnN5c3RndD0lMjRxYyUzZDEzMTQxMDU5ODMlM2IlMjRxbCUzZEhpZ2glM2IlMjRxcGMlM2RlMTYlM2IlMjRxcGMlM2RlMSolM2IlMjRxcGMlM2RlMTYqJTNiJTI0cXQlM2Q3OF8yNTMxXzE3MjY4MHQlM2IlMjRkbWElM2QwJTNiJTI0cW8lM2Q1JTNiJTI0YiUzZDEyOTk5JTNiJTI0byUzZDk5OTk5JmFjZD0xNzY1NTQwMjE0OTA0JmVudnR5cGU9MCZzaXRlaWQ9NzIzNTE5JnRndD1jb3VudHJ5JTNkR0IlM2JyZWdpb24lM2RFTkclM2IlMjRkdCUzZDF0JmdkcHI9MSZvcGlkPWJmZWM0YmFlLTQ1M2YtNDQxYy1iMGI0LWQwNDI1NWY0YzU2OSZvcGR0PTE3NjU1NDAyMTQ5MDMmYmxkdj0xNDM2MyZzcmNmbj1kaWZmJnJlcWlkPTEwZDVmZWU4LWIyZDEtNGJkYS1iZWYzLWUwZGQ0MTEwYWExMyZyZXFkdD0xNzY1NTQwMjE0OTA0Jm9wcGlkPWJmZWM0YmFlLTQ1M2YtNDQxYy1iMGI0LWQwNDI1NWY0YzU2OSZ2aXNpdD1WJnN0YXRpZD01JmltcHR5cGU9MCZpbnRndHlwZT0wJmNhcHA9MCZtY3JkYnQ9MSZpbnNpZD0xMjkzNzkwMSZpbWdpZD00MTQwMTcwMSZwZ2lkPTIxMDQxNjgmZm10aWQ9MTQ0MDIwJmlzTGF6eT0wJnNjcmlwdGlkPTEwMDA5NxJGTW96aWxsYS81LjAgKFgxMTsgTGludXggeDg2XzY0OyBydjoxNDUuMCkgR2Vja28vMjAxMDAxMDEgRmlyZWZveC8xNDUuMBoMMTYxLjc2LjIzNi4wEiBqSyMRJkGGa9hLeUr9fsUgAe695_PC0sRAbvltMOZP8g",
+								"report": "https://ads.mozilla.org/v1/t?data=CukEEgg0MTQwMTcwMRoMCPaC8MkGELLCx60DIgwI9oLwyQYQssLHrQMqEk1vemlsbGEgRm91bmRhdGlvbjIkYzA3NGFlMWItODk2ZS00Y2ZmLWE2MjctNWY4NjI1ODVmZjZmOgJHQnIQbmV3dGFiX3N0b3JpZXNfMXoDRU5HggFOTW96aWxsYS81LjAgKFgxMTsgVWJ1bnR1OyBMaW51eCB4ODZfNjQ7IHJ2OjE0Ni4wKSBHZWNrby8yMDEwMDEwMSBGaXJlZm94LzE0Ni4wmAEEoAEBqAECsAEDuAEEwgEkMmM5MjA4OWMtYzY0Yi00YTI4LWEyYzAtZGQ5NGM1YWE3NGIw6gEwaHR0cHM6Ly9tb3ppbGxhZm91bmRhdGlvbi5vcmcvP2Zvcm09ZW95LW50YTI1LWMx8gHMAWh0dHBzOi8vY3JlYXRpdmVzLnNhc2Nkbi5jb20vZGlmZi81NDE0L2FkdmVydGlzZXIvNTM1ODE2L01vemlsbGFfSGFzX1JlYWNoZWRfODVfX09mX091cl8yMDI1X0Z1bmRyYWlzaW5nX0dvYWwuX0RvbmF0ZV9Ob3dfRm9yX0FfQmV0dGVyX1RlY2hfRnV0dXJlLl9fX19fUGhvdG9ncmFwaHlfMWZjMWJiYTAtZDMzZC00ZmNhLThiNzMtZjA3YWViNDYxNzhiLmpwZ_oBCDEyOTM3OTAxggJWTW96aWxsYSBIYXMgUmVhY2hlZCA4NSUgT2YgT3VyIDIwMjUgRnVuZHJhaXNpbmcgR29hbC4gRG9uYXRlIEZvciBBIEJldHRlciBUZWNoIEZ1dHVyZS4SIFbbAD7mMerMAiBA8Y3h3Uc9wnqsutJVJpHNycxykknH"
+							},
+							"caps": {
+								"flight": {
+									"count": 10,
+									"period": 86400
+								}
+							},
+							"domain": "",
+							"excerpt": "",
+							"raw_image_src": "https://ads-img.mozilla.org/v1/images?image_data=Cs8BCswBaHR0cHM6Ly9jcmVhdGl2ZXMuc2FzY2RuLmNvbS9kaWZmLzU0MTQvYWR2ZXJ0aXNlci81MzU4MTYvTW96aWxsYV9IYXNfUmVhY2hlZF84NV9fT2ZfT3VyXzIwMjVfRnVuZHJhaXNpbmdfR29hbC5fRG9uYXRlX05vd19Gb3JfQV9CZXR0ZXJfVGVjaF9GdXR1cmUuX19fX19QaG90b2dyYXBoeV8xZmMxYmJhMC1kMzNkLTRmY2EtOGI3My1mMDdhZWI0NjE3OGIuanBnEiCM_BDWKJZ_VMghRGmo2ORa9w-a7qmYsB_cvYi1Z6ssxw",
+							"priority": 74,
+							"personalization_models": null,
+							"item_score": 1,
+							"sponsor": "Mozilla Foundation",
+							"title": "Mozilla Has Reached 85% Of Our 2025 Fundraising Goal. Donate For A Better Tech Future.",
+							"url": "https://mozillafoundation.org/?form=eoy-nta25-c1",
+							"fetchTimestamp": 1765540214971,
+							"score": 0.12308149097933274,
+							"scorableItem": {
+								"id": "12937901",
+								"item_tags": {
+									"finance": 0.5773502691896258,
+									"jobs_and_education": 0.5773502691896258,
+									"sports": 0.5773502691896258
+								},
+								"item_score": 1,
+								"item_sort_id": 1
+							},
+							"rankingVector": {
+								"final_features": {
+									"tag_sim": 0.12309149097933274,
+									"item_sort_id": 1
+								},
+								"coeffs": {
+									"tag_sim": 1,
+									"item_sort_id": -0.00001
+								},
+								"score": 0.12308149097933274
+							}
+						}
+					]
+				}
+			},
+			"loaded": true,
+			"frequency_caps": [],
+			"blocked": [],
+			"placements": [
+				{
+					"name": "newtab_spocs",
+					"ad_types": [
+						3617
+					],
+					"zone_ids": [
+						217758,
+						217995
+					]
+				}
+			]
+		},
+		"experimentData": {
+			"utmSource": "pocket-newtab"
+		},
+		"showTopicSelection": false,
+		"report": {
+			"visible": false,
+			"data": {}
+		},
+		"sectionPersonalization": {},
+		"hideDescriptions": true,
+		"compactImages": false,
+		"imageGradient": false,
+		"newSponsoredLabel": false,
+		"titleLines": 3,
+		"descLines": 3,
+		"readTime": true
+	},
+	"Search": {
+		"fakeFocus": false,
+		"hide": false
+	},
+	"TimerWidget": {
+		"timerType": "focus",
+		"focus": {
+			"duration": 1500,
+			"initialDuration": 1500,
+			"startTime": null,
+			"isRunning": false
+		},
+		"break": {
+			"duration": 300,
+			"initialDuration": 300,
+			"startTime": null,
+			"isRunning": false
+		}
+	},
+	"ListsWidget": {
+		"selected": "taskList",
+		"lists": {
+			"taskList": {
+				"label": "",
+				"tasks": [],
+				"completed": []
+			}
+		}
+	},
+	"TrendingSearch": {
+		"suggestions": [],
+		"collapsed": false
+	},
+	"Wallpapers": {
+		"wallpaperList": [
+			{
+				"theme": "dark",
+				"title": "black-waves",
+				"schema": 1742810343093,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-abstract-black-waves",
+				"attachment": {
+					"hash": "013b5e3a6d79b4aa740c7976b6ba61a867e47de47abe1195420ec164bfb3c73f",
+					"size": 202368,
+					"filename": "black%20curve.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/18c7861f-0c9d-48d4-a98c-fb8999e331bd.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@pawel_czerwinski",
+						"string": "Pawel Czerwinski"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/a-close-up-of-a-cell-phone-with-a-black-background-UKSC-TQE7TA",
+						"string": "Unsplash"
+					}
+				},
+				"id": "0114fe5c-4401-40a9-b8a4-313580aeaa19",
+				"last_modified": 1743101895103,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/18c7861f-0c9d-48d4-a98c-fb8999e331bd.avif"
+			},
+			{
+				"theme": "light",
+				"title": "blue",
+				"schema": 1718643233937,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-blue",
+				"solid_color": "#76C1FF",
+				"id": "02c24a73-67fd-4459-b77a-6550c365d8ee",
+				"last_modified": 1718647622963
+			},
+			{
+				"theme": "light",
+				"title": "abstract-blue",
+				"schema": 1718906348500,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-abstract-blue",
+				"attachment": {
+					"hash": "24d6733f3ff1aa1b0b23df697b3527d9d511964cdb30620184cf1bf6484f7d62",
+					"size": 182925,
+					"filename": "abstract-blue.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/e1108381-5c19-4cb4-a630-69f9e45503fb.avif",
+					"mimetype": "image/avif"
+				},
+				"id": "081af855-daf4-4d11-9b43-b690e20acc1c",
+				"last_modified": 1718906679999,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/e1108381-5c19-4cb4-a630-69f9e45503fb.avif"
+			},
+			{
+				"theme": "light",
+				"title": "light-green",
+				"schema": 1718643966390,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-light-green",
+				"solid_color": "#DAE8E0",
+				"id": "13af9c00-685a-41a3-8b35-80936ccc6961",
+				"last_modified": 1718647622955
+			},
+			{
+				"theme": "light",
+				"title": "green",
+				"schema": 1718644038276,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-green",
+				"solid_color": "#A8DF8E",
+				"id": "18fd6f2c-0b3e-4b17-af01-6ad9d84eeee2",
+				"last_modified": 1718647622953
+			},
+			{
+				"theme": "light",
+				"title": "abstract-green",
+				"schema": 1718875716751,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-abstract-green",
+				"attachment": {
+					"hash": "0cdfae1997d508d8ae25a3f4d0169b38b31e317e588a971008134db2327ab246",
+					"size": 68945,
+					"filename": "abstract-green.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/13495d0e-f975-4218-b5f0-c841c69ce2e5.avif",
+					"mimetype": "image/avif"
+				},
+				"id": "1bbf4d6a-1720-4462-a471-8ca90cb8cffa",
+				"last_modified": 1718906680010,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/13495d0e-f975-4218-b5f0-c841c69ce2e5.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "dark-sky",
+				"schema": 1718637445591,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-dark-sky",
+				"attachment": {
+					"hash": "6ab2a71c1d5866c10f6c8bb555b019ed6127a48112e410694bedf6fe8d5cdab9",
+					"size": 461323,
+					"filename": "dark-sky.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/e94b1e49-c518-40d6-98e3-dffab6cc370d.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@felix_mittermeier",
+						"string": "Felix Mittermeier"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/lightning-strike-under-cloudy-sky-WLGHjbC0Cq4",
+						"string": "Unsplash"
+					}
+				},
+				"id": "1d182cca-5359-4126-a8c4-e5dc868fc21e",
+				"last_modified": 1718647622999,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/e94b1e49-c518-40d6-98e3-dffab6cc370d.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "firefox-b",
+				"schema": 1762451289464,
+				"category": "firefox",
+				"attachment": {
+					"hash": "0483fd7bb1054d61301e9fcb2752009a6466f5213933f72dddd66ff909e239a2",
+					"size": 286845,
+					"filename": "desktop-wallpaper-b-1920x1080.svg",
+					"location": "main-workspace/newtab-wallpapers-v2/6f7e2155-df50-4917-81fd-9c6f16e14965.svg",
+					"mimetype": "image/svg+xml"
+				},
+				"id": "1d43f5a1-64bd-4ad4-b825-88a89878662f",
+				"last_modified": 1762459339482,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/6f7e2155-df50-4917-81fd-9c6f16e14965.svg"
+			},
+			{
+				"theme": "dark",
+				"title": "starry-canyon",
+				"schema": 1744046191375,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-starry-canyon",
+				"attachment": {
+					"hash": "394babc1cfd55065c84720869214f50ba39376c1d03eedc0d53327e252825e96",
+					"size": 290368,
+					"filename": "blue%20starry%20night.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/7d98c7ab-274a-411d-95e4-84afd4e6203c.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@markbasarabvisuals",
+						"string": "Mark Basarab"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/blue-starry-night-1OtUkD_8svc",
+						"string": "Unsplash"
+					}
+				},
+				"id": "2437199a-03d7-455b-a9ab-96b14c5b862d",
+				"last_modified": 1744052577014,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/7d98c7ab-274a-411d-95e4-84afd4e6203c.avif"
+			},
+			{
+				"theme": "light",
+				"title": "purple-green",
+				"schema": 1741985417348,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-abstract-purple-green",
+				"attachment": {
+					"hash": "3d9362a5a49aa9591a8892ef719207877df244503597a47a3c2b1d3f95beab6d",
+					"size": 237720,
+					"filename": "gradient%20purple%20blue.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/31dd47f1-a979-42a0-8351-33c2bb0b35cf.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@fakurian",
+						"string": "Milad Fakurian"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/purple-and-green-light-gradient-iFu2HILEng8",
+						"string": "Unsplash"
+					}
+				},
+				"id": "27c0d230-787e-4f98-bb9d-11e9994e4937",
+				"last_modified": 1742232562513,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/31dd47f1-a979-42a0-8351-33c2bb0b35cf.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "eclipse-time-lapse",
+				"schema": 1744045738328,
+				"category": "celestial",
+				"fluent_id": "newtab-wallpaper-celestial-eclipse-time-lapse",
+				"attachment": {
+					"hash": "fc6235317973afa7b3f34b91e79525ec7716d54faf6c558ab226e5c982d8cd68",
+					"size": 207752,
+					"filename": "lunar%20eclipse.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/55b678ff-15c3-49d5-bdbc-40f8413cfb8a.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@farzadme",
+						"string": "Farzad Mohsenvand"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/lunar-eclipse-illustration-TbuescuqMjA",
+						"string": "Unsplash"
+					}
+				},
+				"id": "2868b784-19d5-4f9b-9f77-047917484b19",
+				"last_modified": 1744046191277,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/55b678ff-15c3-49d5-bdbc-40f8413cfb8a.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "dark-blue",
+				"schema": 1718644294471,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-dark-blue",
+				"solid_color": "#031A3E",
+				"id": "289ec57a-9875-450e-b0cf-46436d75c11f",
+				"last_modified": 1718647622934
+			},
+			{
+				"theme": "dark",
+				"title": "dark-purple",
+				"schema": 1718644320019,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-dark-purple",
+				"solid_color": "#450A54",
+				"id": "2bb4d4d4-ed76-450a-805c-e4d4af19f215",
+				"last_modified": 1718647622932
+			},
+			{
+				"theme": "light",
+				"title": "firefox-f",
+				"schema": 1762456642236,
+				"category": "firefox",
+				"attachment": {
+					"hash": "07e565c12279637b52212d1cf0d4f23039e743e6623896f7e72bc1e6f05be974",
+					"size": 6463,
+					"filename": "desktop-wallpaper-f-1920x1080.svg",
+					"location": "main-workspace/newtab-wallpapers-v2/9b9d40c7-a3bf-4058-836a-2ce378e8daf5.svg",
+					"mimetype": "image/svg+xml"
+				},
+				"id": "2bf99683-cde8-438b-9f8e-a1222dc7f59c",
+				"last_modified": 1762459339496,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/9b9d40c7-a3bf-4058-836a-2ce378e8daf5.svg"
+			},
+			{
+				"theme": "dark",
+				"title": "dark-mountain",
+				"schema": 1718637174316,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-dark-mountain",
+				"attachment": {
+					"hash": "f5933a35945f5103ff98892f45ce03c59b2c3c1be35455faf45b10355492fd95",
+					"size": 308468,
+					"filename": "dark-mountain.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/af6073d2-cbb2-4e28-b642-3327d14808b2.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@heytowner",
+						"string": "John Towner"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/aerial-photo-of-brown-moutains-JgOeRuGD_Y4",
+						"string": "Unsplash"
+					}
+				},
+				"id": "2ccb7af0-28fc-48e6-9dbe-a1da930f7344",
+				"last_modified": 1718647623004,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/af6073d2-cbb2-4e28-b642-3327d14808b2.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "firefox-e",
+				"schema": 1762451428827,
+				"category": "firefox",
+				"attachment": {
+					"hash": "fe1cb48a30da9b05ba14b550918f708953ee6e44fa5a878bcbc5d3d7963176ad",
+					"size": 4567,
+					"filename": "desktop-wallpaper-e-1920x1080.svg",
+					"location": "main-workspace/newtab-wallpapers-v2/0b039df1-971b-445a-84f6-6a15da08940e.svg",
+					"mimetype": "image/svg+xml"
+				},
+				"id": "2e468f89-ac6a-474f-a789-5de0be601887",
+				"last_modified": 1762459339477,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/0b039df1-971b-445a-84f6-6a15da08940e.svg"
+			},
+			{
+				"theme": "dark",
+				"title": "dark-green",
+				"schema": 1718644346535,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-dark-green",
+				"solid_color": "#19310D",
+				"id": "35f8a180-8579-461d-be72-3d5d889dba62",
+				"last_modified": 1718647622929
+			},
+			{
+				"theme": "light",
+				"title": "firefox-c",
+				"schema": 1762451342038,
+				"category": "firefox",
+				"attachment": {
+					"hash": "7785790af185a3eca30177b678ab590773b209149dc14167a61044f8abdc7e1a",
+					"size": 14552,
+					"filename": "desktop-wallpaper-c-1920x1080.svg",
+					"location": "main-workspace/newtab-wallpapers-v2/ae9afcad-83a6-49c5-91b3-8fbea798b88f.svg",
+					"mimetype": "image/svg+xml"
+				},
+				"id": "429c288c-8d92-4baa-aefb-a04719882454",
+				"last_modified": 1762459339487,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/ae9afcad-83a6-49c5-91b3-8fbea798b88f.svg"
+			},
+			{
+				"theme": "light",
+				"title": "red",
+				"schema": 1718644265416,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-red",
+				"solid_color": "#9D242D",
+				"id": "42c4e7e1-c108-45d1-bc5a-4aa0031e9a3e",
+				"last_modified": 1718647622937
+			},
+			{
+				"theme": "dark",
+				"title": "dark-panda",
+				"schema": 1718637336167,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-dark-panda",
+				"attachment": {
+					"hash": "359ec1d08b10aec1ea6d5cb50ddb0ccbd7660301407ee2eb602cf877b1ab857a",
+					"size": 391823,
+					"filename": "dark-panda.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/6b8eb3cf-f232-4c7b-a179-afd174555134.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@willrust",
+						"string": "Will Rust"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/a-red-panda-yawns-in-a-tree-ERm7haDBW8k",
+						"string": "Unsplash"
+					}
+				},
+				"id": "4374cca0-fd79-4626-b55f-ccbe1eb13e2f",
+				"last_modified": 1718647623002,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/6b8eb3cf-f232-4c7b-a179-afd174555134.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "firefox-a",
+				"schema": 1762457227299,
+				"category": "firefox",
+				"attachment": {
+					"hash": "dfdeb8a64fc3a5c9d160472bc10467acc3e3ffba51da05c7b222a1315dd8a1f4",
+					"size": 19020,
+					"filename": "desktop-wallpaper-a-1920x1080.svg",
+					"location": "main-workspace/newtab-wallpapers-v2/e08c3e8c-4bda-48e4-8f36-a1d203f46536.svg",
+					"mimetype": "image/svg+xml"
+				},
+				"id": "451090be-cdf1-49fc-b1f3-bd2f3b4ac34d",
+				"last_modified": 1762459339500,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/e08c3e8c-4bda-48e4-8f36-a1d203f46536.svg"
+			},
+			{
+				"theme": "light",
+				"title": "orange",
+				"schema": 1718644150837,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-orange",
+				"solid_color": "#FEBE5E",
+				"id": "47a48447-d3e8-4711-a74e-33dcbd64c889",
+				"last_modified": 1718647622945
+			},
+			{
+				"theme": "light",
+				"title": "beige",
+				"schema": 1718644062923,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-beige",
+				"solid_color": "#EDD5B8",
+				"id": "59bd06d3-fa74-4059-ada2-046d48b71285",
+				"last_modified": 1718647622950
+			},
+			{
+				"theme": "light",
+				"title": "abstract-blue-purple",
+				"schema": 1718906311906,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-abstract-blue-purple",
+				"attachment": {
+					"hash": "7f80fd687288944a9e90b2b4d324a3e8b33e1575b9dbf21f953b06da26b7cac4",
+					"size": 26236,
+					"filename": "abstract-noodles.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/becfadf4-4c2d-4fad-bbbc-b060d12277e5.avif",
+					"mimetype": "image/avif"
+				},
+				"id": "604378cd-ff54-4219-bed3-137889283c5e",
+				"last_modified": 1718906680002,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/becfadf4-4c2d-4fad-bbbc-b060d12277e5.avif"
+			},
+			{
+				"theme": "light",
+				"title": "firefox-d",
+				"schema": 1762451361798,
+				"category": "firefox",
+				"attachment": {
+					"hash": "74988ebbc20bbc957f9b082793fea4f667e307aea3e873ba01a4f094e26e8452",
+					"size": 26913,
+					"filename": "desktop-wallpaper-d-1920x1080.svg",
+					"location": "main-workspace/newtab-wallpapers-v2/3640c0ff-19a2-4f7b-a06a-fdc2232ddd4a.svg",
+					"mimetype": "image/svg+xml"
+				},
+				"id": "62aa72d9-b9f3-4f29-88f5-5120ee004e7c",
+				"last_modified": 1762459339491,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/3640c0ff-19a2-4f7b-a06a-fdc2232ddd4a.svg"
+			},
+			{
+				"theme": "light",
+				"title": "light-pink",
+				"schema": 1718644236363,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-light-pink",
+				"solid_color": "#F4DBE9",
+				"id": "6ab3849e-2e09-4751-9620-1e815e0a0c03",
+				"last_modified": 1718647622940
+			},
+			{
+				"theme": "light",
+				"title": "light-blue",
+				"schema": 1718643826574,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-light-blue",
+				"solid_color": "#D4E7F6",
+				"id": "6beb382b-183d-428b-9b0e-c2f213d0c245",
+				"last_modified": 1718647622960
+			},
+			{
+				"theme": "dark",
+				"title": "lunar-eclipse",
+				"schema": 1744045768465,
+				"category": "celestial",
+				"fluent_id": "newtab-wallpaper-celestial-lunar-eclipse",
+				"attachment": {
+					"hash": "3fa57c2d377a78cdc95ec097a4a4bc49fb126e7d6544c53b765410692d10843e",
+					"size": 527364,
+					"filename": "moon%20eclipse.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/7fd1f326-58cf-4b5c-9737-e68a8c44dc51.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@sarahleejs",
+						"string": "Jongsun Lee"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/moon-eclipse-F-pSZO_jeE8",
+						"string": "Unsplash"
+					}
+				},
+				"id": "6c40ffd3-b8e3-48a2-a0a0-53517aa37557",
+				"last_modified": 1744046191280,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/7fd1f326-58cf-4b5c-9737-e68a8c44dc51.avif"
+			},
+			{
+				"theme": "light",
+				"title": "hot-air-balloons",
+				"schema": 1744046930612,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-hot-air-balloons",
+				"attachment": {
+					"hash": "e95169a269ebae69c46b7202a3438903f7baf5485a878e13468ad0dc07414271",
+					"size": 297339,
+					"filename": "hot%20air%20ballons.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/ade94d3a-9a02-4b30-848f-638725a05180.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@sadswim",
+						"string": "ian dooley"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/assorted-color-hot-air-balloons-during-daytime-DuBNA1QMpPA",
+						"string": "Unsplash"
+					}
+				},
+				"id": "6c76fca3-3b93-41f1-b7f6-c863efcd3e91",
+				"last_modified": 1744052577008,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/ade94d3a-9a02-4b30-848f-638725a05180.avif"
+			},
+			{
+				"theme": "light",
+				"title": "light-panda",
+				"schema": 1718638748651,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-light-red-panda",
+				"attachment": {
+					"hash": "f9a34f02573401aea9366a9e97a4cdc92f925ad6ac8d56d0bedfaf0dff9e86b1",
+					"size": 531549,
+					"filename": "light-panda.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/dfd3762e-f77d-4b6e-ac75-32eb2549ef40.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@_melsayed",
+						"string": "Mohamed Elsayed"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/red-panda-on-snow-covered-ground-during-daytime-DWpR-BpKlw0",
+						"string": "Unsplash"
+					}
+				},
+				"id": "74260419-d829-42ef-bb9f-4d93be63472a",
+				"last_modified": 1718647622985,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/dfd3762e-f77d-4b6e-ac75-32eb2549ef40.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "black-hole",
+				"schema": 1744045732063,
+				"category": "celestial",
+				"fluent_id": "newtab-wallpaper-celestial-black-hole",
+				"attachment": {
+					"hash": "c6bcb286c3a289c21e9fae4602f8f9defc68b7c9f4888a4b7f0c9be6943826d7",
+					"size": 324019,
+					"filename": "black%20hole%20galaxy.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/9fa5c4e0-5f22-419e-b2eb-a3494520f5f2.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@gferla",
+						"string": "Guillermo Ferla"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/black-hole-galaxy-illustration-Oze6U2m1oYU",
+						"string": "Unsplash"
+					}
+				},
+				"id": "7622072d-a734-4df7-a467-cde719b60875",
+				"last_modified": 1744046191285,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/9fa5c4e0-5f22-419e-b2eb-a3494520f5f2.avif"
+			},
+			{
+				"theme": "light",
+				"title": "light-fox-anniversary",
+				"schema": 1729617910248,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-light-fox-anniversary",
+				"attachment": {
+					"hash": "649c272fed6c4ba3d15c5179efc85a1c528d39a074259386cf91be89ea2f67f3",
+					"size": 140270,
+					"filename": "light-fox-anniversary-v2.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/a5a041de-9275-4eb5-8f21-a0171c82d388.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@sr_kike_",
+						"string": "Luis Enrique Ibarra"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/brown-and-white-fox-on-green-grass-field-during-daytime-SLOm_cfWTT4",
+						"string": "Unsplash"
+					}
+				},
+				"id": "77bf5044-7821-4125-b555-10f71af37fd4",
+				"last_modified": 1729618200381,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/a5a041de-9275-4eb5-8f21-a0171c82d388.avif"
+			},
+			{
+				"theme": "light",
+				"title": "blue-flowers",
+				"schema": 1744047286143,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-blue-flowers",
+				"attachment": {
+					"hash": "4f20e391651c537e09c730c13c8a88408ade7bfc04e134987965718a491dd705",
+					"size": 214442,
+					"filename": "flowers.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/f5c362af-16df-488d-a8b2-bf8cf29d1c63.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@sorasagano",
+						"string": "Sora Sagano"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/closeup-photography-of-blue-petaled-flowers-on-bloom-F6ZzivdSQ5k",
+						"string": "Unsplash"
+					}
+				},
+				"id": "785549a0-c1c0-488b-9cc2-f7a18f3ba204",
+				"last_modified": 1744052577022,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/f5c362af-16df-488d-a8b2-bf8cf29d1c63.avif"
+			},
+			{
+				"theme": "light",
+				"title": "brown",
+				"schema": 1718644381622,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-brown",
+				"solid_color": "#401F00",
+				"id": "7a88dafb-3a82-4346-b34c-0b7d9232f497",
+				"last_modified": 1718647622926
+			},
+			{
+				"theme": "dark",
+				"title": "dark-fox-anniversary",
+				"schema": 1729617515102,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-dark-fox-anniversary",
+				"attachment": {
+					"hash": "eeb9526e6bcdb29b6fd5b59273d1d48ab99c4aee3d9e72584bb9eee6790e2218",
+					"size": 291301,
+					"filename": "dark-fox-anniversary-v2.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/d8b71c77-9985-41d2-b98e-51bebc60e595.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@obkim",
+						"string": "Qijin Xu"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/brown-and-white-fox-fJyO0eo6_aI",
+						"string": "Unsplash"
+					}
+				},
+				"id": "7e6ab485-8f0d-463f-8f40-1bd77a82e034",
+				"last_modified": 1729618200384,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/d8b71c77-9985-41d2-b98e-51bebc60e595.avif"
+			},
+			{
+				"theme": "light",
+				"title": "light-landscape",
+				"schema": 1718638214844,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-light-landscape",
+				"attachment": {
+					"hash": "e03ad82c9a5c6da8873cbdd21a5186a61c2eab9fe582f68e8da84cbb79b97885",
+					"size": 223179,
+					"filename": "light-landscape.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/d9289c5b-8c78-4b27-b5d8-afe7285ce7d1.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@caroliniecavalli",
+						"string": "Carolinie Cavalli"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/birds-eye-view-photography-of-mountain-Qw3w0oBH63s",
+						"string": "Unsplash"
+					}
+				},
+				"id": "8039d4b1-18c9-4a7f-9ce7-9737b224d565",
+				"last_modified": 1718647622990,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/d9289c5b-8c78-4b27-b5d8-afe7285ce7d1.avif"
+			},
+			{
+				"theme": "light",
+				"title": "light-purple",
+				"schema": 1718643868872,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-light-purple",
+				"solid_color": "#D3A3F3",
+				"id": "840007a0-7989-4a1c-a2a5-3fc422b9570d",
+				"last_modified": 1718647622958
+			},
+			{
+				"theme": "light",
+				"title": "white-curves",
+				"schema": 1741985132349,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-abstract-white-curves",
+				"attachment": {
+					"hash": "5ba6bb88912ce34b132b6809a25682d2d1cccdae1d877642d312e1644b86daa5",
+					"size": 319578,
+					"filename": "white%20curve.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/ea29bb39-223f-4c49-9362-b7caf75313af.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@vackground",
+						"string": "vackground.com"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/an-abstract-white-background-with-a-curved-curve-0F2pC8_DwvM",
+						"string": "Unsplash"
+					}
+				},
+				"id": "8f3f9010-0e47-4924-88f3-342f73cfbbc3",
+				"last_modified": 1742232562516,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/ea29bb39-223f-4c49-9362-b7caf75313af.avif"
+			},
+			{
+				"theme": "light",
+				"title": "light-color",
+				"schema": 1721056774979,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-light-color",
+				"attachment": {
+					"hash": "cd28bc282ba8dda5f6660389eb2a7ba66a57691504de2eba3405ec20eeddd5a0",
+					"size": 288837,
+					"filename": "light-color.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/a205885e-194a-41f9-ae47-e7da66a74041.avif",
+					"mimetype": "image/avif"
+				},
+				"id": "8f896365-c4e8-497a-b8c1-c5033e4a7456",
+				"last_modified": 1721068497119,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/a205885e-194a-41f9-ae47-e7da66a74041.avif"
+			},
+			{
+				"theme": "light",
+				"title": "abstract-purple",
+				"schema": 1718906291053,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-abstract-purple",
+				"attachment": {
+					"hash": "96fbb04dd5494fb8383541289d29c22ac08dcdee242a104a310f3526b902d8fd",
+					"size": 90925,
+					"filename": "abstract-purple.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/6bf5c4ac-f55b-4de3-bbf5-1b0f2f56d488.avif",
+					"mimetype": "image/avif"
+				},
+				"id": "92c5a286-da38-4135-ad41-6a3d659e3563",
+				"last_modified": 1718906680006,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/6bf5c4ac-f55b-4de3-bbf5-1b0f2f56d488.avif"
+			},
+			{
+				"theme": "light",
+				"title": "sand-dunes",
+				"schema": 1744047082520,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-sand-dunes",
+				"attachment": {
+					"hash": "27f42ef7095512570ac91ad165478ecb09d7343fcba161f1ed83d2edd767b547",
+					"size": 354178,
+					"filename": "white%20sand.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/7dcbd2c8-8982-4108-b044-fae72b46e97f.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@wildhoney",
+						"string": "John Fowler"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/white-sand-RsRTIofe0HE",
+						"string": "Unsplash"
+					}
+				},
+				"id": "936f5914-d192-4f87-8481-c3e74e8adb5d",
+				"last_modified": 1744052577017,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/7dcbd2c8-8982-4108-b044-fae72b46e97f.avif"
+			},
+			{
+				"theme": "light",
+				"title": "light-mountain",
+				"schema": 1718638685878,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-light-mountain",
+				"attachment": {
+					"hash": "f9fdf49580f9221ba2583d0a818d60ae79b9fd50246ef36798a264e6645b6709",
+					"size": 541196,
+					"filename": "light-mountain.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/5344443f-f427-4029-bc6b-68bc22f83355.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@daesign",
+						"string": "Sead Dedić"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/mountain-covered-with-snow-under-white-clouds-si8OYpuLVBY",
+						"string": "Unsplash"
+					}
+				},
+				"id": "98d063e5-1481-4df2-abed-e22e86b24e98",
+				"last_modified": 1718647622988,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/5344443f-f427-4029-bc6b-68bc22f83355.avif"
+			},
+			{
+				"theme": "light",
+				"title": "yellow",
+				"schema": 1718644107243,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-yellow",
+				"solid_color": "#FFF7B2",
+				"id": "9b0e2e3c-bf01-4e06-b051-3b439ff32592",
+				"last_modified": 1718647622947
+			},
+			{
+				"theme": "dark",
+				"title": "dark-beach",
+				"schema": 1718636331169,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-dark-city",
+				"attachment": {
+					"hash": "7272b542d0b28513daa9c1bdb27ae09d606c189d1c144bc6d5b550b5020c67de",
+					"size": 713257,
+					"filename": "dark-beach.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/966b18ad-3733-41c4-92f6-c89cdf1381d0.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@yespanioly",
+						"string": "Yousef Espanioly"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/seashore-DA_tplYgTow",
+						"string": "Unsplash"
+					}
+				},
+				"id": "a01be688-31cf-4f68-ac3e-e2cec09cb15a",
+				"last_modified": 1718647623009,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/966b18ad-3733-41c4-92f6-c89cdf1381d0.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "blue-purple",
+				"schema": 1756865736197,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-abstract-blue-purple",
+				"attachment": {
+					"hash": "2ce4d2b293611d478a57398e982e791c2ef6a628eb02c7ab11e47d8a001dfd02",
+					"size": 309538,
+					"filename": "wavy%20shapes.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/036ac885-33cb-41db-bcbb-52dd49254a12.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@martz90",
+						"string": "Martin Martz"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/a-blue-and-purple-background-with-wavy-shapes-1hg6NpO0kIk",
+						"string": "Unsplash"
+					}
+				},
+				"id": "b33cf5ec-52c4-4220-be05-1a3d4c998443",
+				"last_modified": 1762459339471,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/036ac885-33cb-41db-bcbb-52dd49254a12.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "palm-trees",
+				"schema": 1744047197627,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-palm-trees",
+				"attachment": {
+					"hash": "5efec5a43ee0e3816cda1f35edb4e5c82f3ae8a554cb99ba13fc578fa45b3a23",
+					"size": 440641,
+					"filename": "palm%20trees.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/32c50b87-9f4b-46cf-a467-f4aa768a1687.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@soyprome",
+						"string": "Prometey Sánchez Noskov"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/silhouette-of-coconut-palm-trees-during-golden-hour-c6M7AoevSXE",
+						"string": "Unsplash"
+					}
+				},
+				"id": "c28c67eb-4cd1-4775-8770-e0650015d19a",
+				"last_modified": 1744052577019,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/32c50b87-9f4b-46cf-a467-f4aa768a1687.avif"
+			},
+			{
+				"theme": "light",
+				"title": "light-sky",
+				"schema": 1718906680116,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-light-sky",
+				"attachment": {
+					"hash": "40a84002cfaf92fd38300e3987146f7b2ec3f5255e0427afbd30a52d7830c0e8",
+					"size": 100634,
+					"filename": "light-sky.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/45ecab20-ffb9-47b4-94ff-07a5f8b9f53f.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@frostroomhead",
+						"string": "Rodion Kutsaiev"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/cloudy-sky-8P-uQaTd8rw",
+						"string": "Unsplash"
+					}
+				},
+				"id": "c4033968-1a5e-4d8b-8961-994e2214db5d",
+				"last_modified": 1721056774861,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/45ecab20-ffb9-47b4-94ff-07a5f8b9f53f.avif"
+			},
+			{
+				"theme": "light",
+				"title": "gradient-orange",
+				"schema": 1718906280424,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-gradient-orange",
+				"attachment": {
+					"hash": "d99c7953bf5fd96fc9778cc6c663063aa7521e32db3d461efadb397be71b745f",
+					"size": 348323,
+					"filename": "gradient-orange.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/bd424c86-6366-4f2b-b8dc-74d21439c1fb.avif",
+					"mimetype": "image/avif"
+				},
+				"id": "d01275ae-cd01-42f1-9ccf-41734e939ee3",
+				"last_modified": 1718906680008,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/bd424c86-6366-4f2b-b8dc-74d21439c1fb.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "dark-color",
+				"schema": 1721057236130,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-dark-color",
+				"attachment": {
+					"hash": "c433865edcc1eae2911f30caa95783adfe5642ec24e8bd41fcfc661276f93752",
+					"size": 206755,
+					"filename": "dark-color.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/d357925c-b9cd-417e-8731-14272f28f556.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@martz90",
+						"string": "Martin Martz"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/a-close-up-of-a-cell-phone-with-a-blurry-background-uuNCR2NpiNE",
+						"string": "Unsplash"
+					}
+				},
+				"id": "d4d8de2b-a32f-400d-83cc-ab136c197e7c",
+				"last_modified": 1721068497117,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/d357925c-b9cd-417e-8731-14272f28f556.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "suspension-bridge",
+				"schema": 1744047008604,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-suspension-bridge",
+				"attachment": {
+					"hash": "ea3dafc1e5cb5b8b81b487b801b34fe3b1fd19d722982b06b9aa95f4b01f2f72",
+					"size": 258311,
+					"filename": "bridge.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/c1130d05-bb6b-448d-bc66-96df1eb088bb.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@andersjilden",
+						"string": "Anders Jildén"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/grey-full-suspension-bridge-photography-during-daytime-AkUR27wtaxs",
+						"string": "Unsplash"
+					}
+				},
+				"id": "de57da1c-94fb-4275-905a-b3bbd1f0f8a5",
+				"last_modified": 1744052577011,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/c1130d05-bb6b-448d-bc66-96df1eb088bb.avif"
+			},
+			{
+				"theme": "light",
+				"title": "pink",
+				"schema": 1718644200528,
+				"category": "solid-colors",
+				"fluent_id": "newtab-wallpaper-pink",
+				"solid_color": "#FA87CC",
+				"id": "e3a76f3b-25ff-4285-b935-63de46bdd711",
+				"last_modified": 1718647622942
+			},
+			{
+				"theme": "dark",
+				"title": "starry-sky",
+				"schema": 1744045755270,
+				"category": "celestial",
+				"fluent_id": "newtab-wallpaper-celestial-starry-sky",
+				"attachment": {
+					"hash": "438c81ca6545f7a76880b9036aff9732e0a9f234d5859e12213029485ce02bdd",
+					"size": 404969,
+					"filename": "stary%20sky.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/43793431-0f4a-473b-b346-7c30df84af10.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@aperturevintage",
+						"string": "Aperture Vintage"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/starry-sky-Z6EpCdMcoUU",
+						"string": "Unsplash"
+					}
+				},
+				"id": "eadb40b9-7d96-4173-994e-ecdb7aade866",
+				"last_modified": 1744046191283,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/43793431-0f4a-473b-b346-7c30df84af10.avif"
+			},
+			{
+				"theme": "light",
+				"title": "light-beach",
+				"schema": 1718637553213,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-light-beach",
+				"attachment": {
+					"hash": "ad65944319e9bb3fa4261e93d465cc51be35873608dfa71d46fe734ae4517c2a",
+					"size": 465893,
+					"filename": "light-beach.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/56a7f3ae-70cc-45f2-82ec-1d39acdd3b8d.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@oulashin",
+						"string": "Sean Oulashin"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/seashore-during-golden-hour-KMn4VEeEPR8",
+						"string": "Unsplash"
+					}
+				},
+				"id": "edc18c37-9d75-4cca-a854-5bcab5275407",
+				"last_modified": 1718647622996,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/56a7f3ae-70cc-45f2-82ec-1d39acdd3b8d.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "earth-night",
+				"schema": 1744045775887,
+				"category": "celestial",
+				"fluent_id": "newtab-wallpaper-celestial-earth-night",
+				"attachment": {
+					"hash": "3e157c2f848870ae89e6339339859ee0d485c03d09328a900fc10fd82e1be60c",
+					"size": 346780,
+					"filename": "outer%20space.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/fa93a1e0-fec5-4351-adc2-5692e5b2bf32.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@nasa",
+						"string": "NASA"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/photo-of-outer-space-Q1p7bh3SHj8",
+						"string": "Unsplash"
+					}
+				},
+				"id": "ef098f84-05b0-4cb7-afee-fccd15e6c50c",
+				"last_modified": 1744046191274,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/fa93a1e0-fec5-4351-adc2-5692e5b2bf32.avif"
+			},
+			{
+				"theme": "light",
+				"title": "abstract-orange",
+				"schema": 1718906302556,
+				"category": "abstracts",
+				"fluent_id": "newtab-wallpaper-abstract-orange",
+				"attachment": {
+					"hash": "82b7a7378c27e82936e09fd747cb65ed28d9909b0469537c405c24961135c3d1",
+					"size": 39943,
+					"filename": "abstract-orange.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/32531fc6-1ea3-46de-a93c-f8a0c2f01916.avif",
+					"mimetype": "image/avif"
+				},
+				"id": "f7f89c99-c258-48b8-ad99-1b45465a0034",
+				"last_modified": 1718906680004,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/32531fc6-1ea3-46de-a93c-f8a0c2f01916.avif"
+			},
+			{
+				"theme": "dark",
+				"title": "dark-landscape",
+				"schema": 1718616316643,
+				"category": "photographs",
+				"fluent_id": "newtab-wallpaper-dark-aurora",
+				"attachment": {
+					"hash": "dba39dab685c2bc6978354537c1bc8218a0abc455d0dd49c134c031264cfcd47",
+					"size": 437288,
+					"filename": "dark-aurora.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/10e23599-85bc-4660-ae06-7a67befbbcf9.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@lightscape",
+						"string": "Lightscape"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/northern-lights-over-snow-capped-mountian-LtnPejWDSAY",
+						"string": "Unsplash"
+					}
+				},
+				"id": "f81d9d10-7f90-4d1d-ae2e-8d49e1cf993a",
+				"last_modified": 1718647623012,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/10e23599-85bc-4660-ae06-7a67befbbcf9.avif"
+			},
+			{
+				"theme": "light",
+				"title": "river",
+				"schema": 1744045761310,
+				"category": "celestial",
+				"fluent_id": "newtab-wallpaper-celestial-river",
+				"attachment": {
+					"hash": "03a1416050bcf9533b3d2094fbe3f433029eafefa178ae0520a4d7e444168209",
+					"size": 374822,
+					"filename": "satellite%20image%20of%20river.avif",
+					"location": "main-workspace/newtab-wallpapers-v2/671df231-8415-4066-8144-0ddb31394a19.avif",
+					"mimetype": "image/avif"
+				},
+				"attribution": {
+					"name": {
+						"url": "https://unsplash.com/@nasa",
+						"string": "NASA"
+					},
+					"webpage": {
+						"url": "https://unsplash.com/photos/satellite-image-of-river-whDrFMucHkc",
+						"string": "Unsplash"
+					}
+				},
+				"id": "fadd6058-24cf-4e41-b9b4-7608498f285c",
+				"last_modified": 1744046191288,
+				"wallpaperUrl": "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/671df231-8415-4066-8144-0ddb31394a19.avif"
+			}
+		],
+		"highlightSeenCounter": {
+			"value": 0
+		},
+		"categories": [
+			"abstracts",
+			"solid-colors",
+			"photographs",
+			"firefox",
+			"celestial",
+			"custom-wallpaper"
+		],
+		"uploadedWallpaper": null
+	},
+	"Weather": {
+		"initialized": false,
+		"lastUpdated": null,
+		"query": "",
+		"suggestions": [],
+		"locationData": {
+			"city": "",
+			"adminArea": "",
+			"country": ""
+		},
+		"searchActive": false,
+		"locationSearchString": "",
+		"suggestedLocations": []
+	}
+};
+
+���K�y           i<AH�e�����       :about:home alt-data 1;59939,script version 20251206010143  Ԧ

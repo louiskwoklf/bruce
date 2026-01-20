@@ -1,0 +1,14 @@
+10
+^partitionKey=%28https%2Canaconda.com%29
+https://www.googletagmanager.com/static/service_worker
+https://www.googletagmanager.com/static/service_worker/5ba0/sw.js?origin=https%3A%2F%2Fwww.anaconda.com
+false
+{248b01fb-0499-4582-a6ea-f09b0c60000a}
+1
+1762858324769984
+1762858324770434
+1762858324749972
+0
+true
+0
+#
