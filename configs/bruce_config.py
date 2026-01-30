@@ -17,16 +17,16 @@ class BruceRoughCfg(LeggedRobotCfg):
            'hip_yaw_r' : -0.00824264,   
            'hip_roll_r' : 0.01822493,    
 
-           'hip_pitch_r' :  0.26926757,   #'hip_pitch_r' :  0.46926757,         
+           'hip_pitch_r' :  0.46926757,#'hip_pitch_r' :  0.26926757,         
            'knee_pitch_r' : -0.94714788,       
-           'ankle_pitch_r' : 0.180,#'ankle_pitch_r' : 0.47781332,     
+           'ankle_pitch_r' : 0.47781332,#'ankle_pitch_r' : 0.180,     
         
            'hip_yaw_l' : 0.00824264, 
            'hip_roll_l' : -0.01822493, 
 
-           'hip_pitch_l' : 0.26926757,#'hip_pitch_l' : 0.46926757,                                       
+           'hip_pitch_l' : 0.46926757,#'hip_pitch_l' : 0.26926757,                                       
            'knee_pitch_l' : -0.94714788,                                             
-           'ankle_pitch_l' : 0.180,#'ankle_pitch_l' : 0.47781332,                                     
+           'ankle_pitch_l' : 0.47781332,#'ankle_pitch_l' : 0.180,                                     
         
            # Arm default positions: Removed for now due to tensor mismatch
            # Tensor mismatch occurs because simulation removes arms, this
